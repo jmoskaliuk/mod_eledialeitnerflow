@@ -1,12 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg"
      width="24" height="24" viewBox="0 0 24 24"
-     fill="none" stroke="#194866"
+     fill="none" stroke="currentColor"
      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <!-- Back card (offset up-left) -->
-  <rect x="3" y="2" width="13" height="9" rx="2" />
-  <!-- Front card (offset down-right) -->
-  <rect x="6" y="5" width="13" height="9" rx="2" />
-  <!-- Forward arrow (card progression) -->
-  <line x1="5" y1="19" x2="15" y2="19" />
-  <polyline points="12 16 15 19 12 22" />
+  <!-- Three stacked flashcards (fan out to the right) -->
+  <rect x="2" y="5" width="12" height="8" rx="1.5" />
+  <rect x="5" y="3" width="12" height="8" rx="1.5" />
+  <rect x="8" y="1" width="12" height="8" rx="1.5" />
+  <!-- Check mark (learned) -->
+  <polyline points="9 16 12 19 20 13" />
 </svg>
