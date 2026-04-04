@@ -9,7 +9,7 @@
   "steps": [
     {
       "title": "<span class=\"multilang\" lang=\"en\">Welcome to LeitnerFlow!</span><span class=\"multilang\" lang=\"de\">Willkommen bei LeitnerFlow!</span>",
-      "content": "<span class=\"multilang\" lang=\"en\">This activity helps me learn with the Leitner flashcard system. My cards move through boxes as I answer correctly — the more I practice, the better I remember!</span><span class=\"multilang\" lang=\"de\">Diese Aktivit\u00e4t hilft mir beim Lernen mit dem Leitner-Karteikartensystem. Meine Karten wandern durch Boxen, wenn ich richtig antworte — je mehr ich \u00fcbe, desto besser merke ich mir den Stoff!</span>",
+      "content": "<span class=\"multilang\" lang=\"en\">This activity helps me learn with the Leitner flashcard system. Each question from the question bank is a card. My cards move through boxes as I answer correctly \u2014 the more I practice, the better I remember!</span><span class=\"multilang\" lang=\"de\">Diese Aktivit\u00e4t hilft mir beim Lernen mit dem Leitner-Karteikartensystem. Jede Frage aus der Fragensammlung ist eine Karte. Meine Karten wandern durch Boxen, wenn ich richtig antworte \u2014 je mehr ich \u00fcbe, desto besser merke ich mir den Stoff!</span>",
       "targettype": 2,
       "targetvalue": "",
       "sortorder": 0,
@@ -25,7 +25,7 @@
     },
     {
       "title": "<span class=\"multilang\" lang=\"en\">My Progress</span><span class=\"multilang\" lang=\"de\">Mein Fortschritt</span>",
-      "content": "<span class=\"multilang\" lang=\"en\">This bar shows my overall learning progress. Each color represents a box. As my cards move forward, the green \"Learned\" section grows. My goal: get the entire bar green!</span><span class=\"multilang\" lang=\"de\">Dieser Balken zeigt meinen gesamten Lernfortschritt. Jede Farbe steht f\u00fcr eine Box. Wenn meine Karten weiter wandern, w\u00e4chst der gr\u00fcne \u201eGelernt\u201c-Bereich. Mein Ziel: den ganzen Balken gr\u00fcn bekommen!</span>",
+      "content": "<span class=\"multilang\" lang=\"en\">This bar shows my overall learning progress. Each colour represents a box. As my cards move forward, the green \u201cLearned\u201d section grows. My goal: get the entire bar green!</span><span class=\"multilang\" lang=\"de\">Dieser Balken zeigt meinen gesamten Lernfortschritt. Jede Farbe steht f\u00fcr eine Box. Wenn meine Karten weiter wandern, w\u00e4chst der gr\u00fcne \u201eGelernt\u201c-Bereich. Mein Ziel: den ganzen Balken gr\u00fcn bekommen!</span>",
       "targettype": 0,
       "targetvalue": ".progress.mb-1",
       "sortorder": 2,
@@ -33,7 +33,7 @@
     },
     {
       "title": "<span class=\"multilang\" lang=\"en\">Start a Session</span><span class=\"multilang\" lang=\"de\">Eine Session starten</span>",
-      "content": "<span class=\"multilang\" lang=\"en\">Here I start my study session. I'll get a set of questions — after each answer, I can see whether my card moved forward or back.</span><span class=\"multilang\" lang=\"de\">Hier starte ich meine Lernsession. Ich bekomme eine Reihe von Fragen gestellt — nach jeder Antwort sehe ich, ob meine Karte vorger\u00fcckt ist oder zur\u00fcckgewandert ist.</span>",
+      "content": "<span class=\"multilang\" lang=\"en\">Here I start my study session. I\u2019ll get a set of questions \u2014 each question is a card. After each answer, I can see whether my card moved forward or back.</span><span class=\"multilang\" lang=\"de\">Hier starte ich meine Lernsession. Ich bekomme eine Reihe von Fragen gestellt \u2014 jede Frage ist eine Karte. Nach jeder Antwort sehe ich, ob meine Karte vorger\u00fcckt ist oder zur\u00fcckgewandert ist.</span>",
       "targettype": 0,
       "targetvalue": ".btn-primary",
       "sortorder": 3,
@@ -41,11 +41,11 @@
     },
     {
       "title": "<span class=\"multilang\" lang=\"en\">My Sessions</span><span class=\"multilang\" lang=\"de\">Meine Sessions</span>",
-      "content": "<span class=\"multilang\" lang=\"en\">Below I find my session history. It shows how many questions I answered correctly in each session, along with a progress bar and the duration. This helps me track my improvement over time.</span><span class=\"multilang\" lang=\"de\">Weiter unten finde ich meine Session-Historie. Sie zeigt, wie viele Fragen ich in jeder Session richtig beantwortet habe, zusammen mit einem Fortschrittsbalken und der Dauer. So kann ich meine Verbesserung \u00fcber die Zeit verfolgen.</span>",
-      "targettype": 2,
-      "targetvalue": "",
+      "content": "<span class=\"multilang\" lang=\"en\">Here I find my session history. It shows how many questions I answered correctly in each session, along with a progress bar and the duration. This helps me track my improvement over time.</span><span class=\"multilang\" lang=\"de\">Hier finde ich meine Session-Historie. Sie zeigt, wie viele Fragen ich in jeder Session richtig beantwortet habe, zusammen mit einem Fortschrittsbalken und der Dauer. So kann ich meine Verbesserung \u00fcber die Zeit verfolgen.</span>",
+      "targettype": 0,
+      "targetvalue": "#leitnerflow-session-history",
       "sortorder": 4,
-      "configdata": "{\"placement\":\"bottom\",\"orphan\":true,\"backdrop\":false,\"reflex\":false,\"delay\":0}"
+      "configdata": "{\"placement\":\"top\",\"orphan\":false,\"backdrop\":true,\"reflex\":false,\"delay\":0}"
     }
   ]
 }

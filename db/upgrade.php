@@ -164,5 +164,25 @@ function xmldb_leitnerflow_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2024120117, 'leitnerflow');
     }
 
+    // Tour update: add "each question = card" hint, target session history by ID.
+    if ($oldversion < 2024120118) {
+        require_once(__DIR__ . '/install.php');
+
+        try {
+            $oldtours = $DB->get_records_select('tool_usertours_tours',
+                $DB->sql_like('name', '?'), ['%LeitnerFlow%']);
+            foreach ($oldtours as $tour) {
+                $DB->delete_records('tool_usertours_steps', ['tourid' => $tour->id]);
+                $DB->delete_records('tool_usertours_tours', ['id' => $tour->id]);
+            }
+        } catch (\Throwable $e) {
+            debugging('LeitnerFlow: Could not clean old tours: ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
+
+        _leitnerflow_import_user_tour();
+
+        upgrade_mod_savepoint(true, 2024120118, 'leitnerflow');
+    }
+
     return true;
 }

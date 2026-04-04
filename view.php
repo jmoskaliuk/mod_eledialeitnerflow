@@ -303,7 +303,7 @@ if ($canattempt) {
     $sessionstats   = leitner_engine::get_session_stats($leitnerflow->id, $USER->id);
 
     if ($sessionstats->sessioncount > 0) {
-        echo html_writer::start_div('card mb-4');
+        echo html_writer::start_div('card mb-4', ['id' => 'leitnerflow-session-history']);
         echo html_writer::start_div('card-body');
 
         // Card title with session count and average.

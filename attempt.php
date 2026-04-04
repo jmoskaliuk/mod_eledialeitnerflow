@@ -348,7 +348,7 @@ function _leitnerflow_render_with_animation(
 
     // Question counter.
     echo html_writer::start_div('d-flex justify-content-between align-items-center mt-3 mb-3');
-    echo html_writer::tag('span', '', ''); // empty left side.
+    echo html_writer::tag('span', ''); // empty left side.
     echo html_writer::span(
         get_string('question') . ' ' . ($answeredindex + 1) . ' / ' . $totalquestions
         . ' &middot; '
