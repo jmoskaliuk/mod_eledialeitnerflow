@@ -18,10 +18,7 @@
  * Question attempt page for mod_leitnerflow.
  *
  * Renders one question at a time using Moodle's question_engine.
- * Flow:
- *   GET  ?id=cmid&start=1      → create new session, redirect to first question
- *   GET  ?id=cmid&sessid=X     → show current question (slot = session->currentindex + 1)
- *   POST ?id=cmid&sessid=X     → process answer, update Leitner state, redirect to next question
+ * Uses Moodle's built-in immediatefeedback Check button (no duplicate).
  *
  * @package    mod_leitnerflow
  * @copyright  2024 eLeDia GmbH
@@ -50,7 +47,7 @@ $viewurl = new moodle_url('/mod/leitnerflow/view.php', ['id' => $cm->id]);
 
 // ---- Start a new session ---------------------------------------------------
 if ($start) {
-    // Cancel any stale active session
+    // Cancel any stale active session.
     $stale = $DB->get_records('leitnerflow_sessions', [
         'leitnerflowid' => $leitnerflow->id,
         'userid'        => $USER->id,
@@ -67,7 +64,7 @@ if ($start) {
         'status'        => 0,
     ]);
 
-    // Select questions for this session
+    // Select questions for this session.
     $questionids = leitner_engine::select_session_questions($leitnerflow, $USER->id);
 
     if (empty($questionids)) {
@@ -75,7 +72,7 @@ if ($start) {
             null, \core\output\notification::NOTIFY_INFO);
     }
 
-    // Build question_usage_by_activity (quba)
+    // Build question_usage_by_activity (quba).
     $quba = question_engine::make_questions_usage_by_activity('mod_leitnerflow', $context);
     $quba->set_preferred_behaviour('immediatefeedback');
 
@@ -86,7 +83,7 @@ if ($start) {
     $quba->start_all_questions();
     question_engine::save_questions_usage_by_activity($quba);
 
-    // Save session record
+    // Save session record.
     $session = new stdClass();
     $session->leitnerflowid  = $leitnerflow->id;
     $session->userid         = $USER->id;
@@ -117,13 +114,12 @@ if (!$sessid) {
 $session = $DB->get_record('leitnerflow_sessions', ['id' => $sessid, 'userid' => $USER->id], '*', MUST_EXIST);
 
 if ((int)$session->status === 1) {
-    // Already completed
     redirect($viewurl);
 }
 
-$questionids = json_decode($session->questionids, true);
+$questionids   = json_decode($session->questionids, true);
 $totalquestions = count($questionids);
-$currentindex   = (int)$session->currentindex;
+$currentindex  = (int)$session->currentindex;
 
 // Session complete?
 if ($currentindex >= $totalquestions) {
@@ -132,7 +128,7 @@ if ($currentindex >= $totalquestions) {
 }
 
 $quba = question_engine::load_questions_usage_by_activity($session->qubaid);
-$slot = $currentindex + 1; // quba slots are 1-based
+$slot = $currentindex + 1; // quba slots are 1-based.
 
 // ---- Process POST (answer submission) --------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -146,13 +142,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fraction = $quba->get_question_fraction($slot);
     $correct  = ($fraction !== null && $fraction >= 1.0);
 
-    // Update Leitner state
+    // Update Leitner state.
     $questionid = $questionids[$currentindex];
     $state = leitner_engine::get_card_state($leitnerflow->id, $USER->id, $questionid);
     $state = leitner_engine::process_answer($state, $correct, $leitnerflow, $questionid, $USER->id);
     leitner_engine::save_card_state($state);
 
-    // Update session progress
+    // Update session progress.
     $session->questionsasked++;
     if ($correct) {
         $session->questionscorrect++;
@@ -160,7 +156,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $session->currentindex = $currentindex + 1;
 
     if ($session->currentindex >= $totalquestions) {
-        // Session done
         _leitnerflow_finish_session($session, $leitnerflow, $cm, $course);
         exit;
     }
@@ -176,66 +171,85 @@ $PAGE->set_title(format_string($leitnerflow->name));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 $PAGE->add_body_class('mod-leitnerflow-attempt');
-$PAGE->requires->js_call_amd('mod_leitnerflow/quiz_session', 'init');
 
-// Display options for question rendering
+// Display options for question rendering.
 $displayoptions = new question_display_options();
-$displayoptions->marks              = question_display_options::MAX_ONLY;
-$displayoptions->feedback           = question_display_options::HIDDEN;
-$displayoptions->generalfeedback    = question_display_options::HIDDEN;
-$displayoptions->rightanswer        = question_display_options::HIDDEN;
-$displayoptions->history            = question_display_options::HIDDEN;
-$displayoptions->correctness        = question_display_options::HIDDEN;
+$displayoptions->marks           = question_display_options::MAX_ONLY;
+$displayoptions->feedback        = question_display_options::HIDDEN;
+$displayoptions->generalfeedback = question_display_options::HIDDEN;
+$displayoptions->rightanswer     = question_display_options::HIDDEN;
+$displayoptions->history         = question_display_options::HIDDEN;
+$displayoptions->correctness     = question_display_options::HIDDEN;
 
-// Get card state for display
-$questionid = $questionids[$currentindex];
-$cardstate  = leitner_engine::get_card_state($leitnerflow->id, $USER->id, $questionid);
-$currentbox = $cardstate ? (int)$cardstate->currentbox : 1;
+// Get card state for display.
+$questionid   = $questionids[$currentindex];
+$cardstate    = leitner_engine::get_card_state($leitnerflow->id, $USER->id, $questionid);
+$currentbox   = $cardstate ? (int)$cardstate->currentbox : 1;
 $correctcount = $cardstate ? (int)$cardstate->correctcount : 0;
 
 echo $OUTPUT->header();
 
-// Progress indicator
+// ---- Top bar: question counter, box badge, score ----
 $progresspct = round(($currentindex / $totalquestions) * 100);
-echo html_writer::start_div('leitnerflow-attempt-header mb-4');
+
+echo html_writer::start_div('leitnerflow-attempt-header mb-3');
+
 echo html_writer::start_div('d-flex justify-content-between align-items-center mb-2');
 echo html_writer::span(
-    get_string('question', 'mod_leitnerflow') . ' ' .
-    ($currentindex + 1) . ' ' .
-    get_string('of', 'mod_leitnerflow') . ' ' .
-    $totalquestions,
+    get_string('question') . ' ' . ($currentindex + 1) . ' / ' . $totalquestions,
     'text-muted small'
 );
-// Box badge
 $boxlabel = ($cardstate && (int)$cardstate->status === leitner_engine::STATUS_LEARNED)
-    ? get_string('cardstatus_learned', 'mod_leitnerflow')
+    ? get_string('learned', 'mod_leitnerflow')
     : get_string('cardstatus_box', 'mod_leitnerflow', $currentbox);
-echo html_writer::span($boxlabel, 'badge bg-secondary');
-echo html_writer::end_div();
-
-// Progress bar
-echo html_writer::start_div('progress mb-3', ['style' => 'height: 8px;']);
-echo html_writer::div('', 'progress-bar bg-primary',
-    ['style' => "width:{$progresspct}%", 'role' => 'progressbar',
-     'aria-valuenow' => $progresspct, 'aria-valuemin' => 0, 'aria-valuemax' => 100]);
-echo html_writer::end_div();
-
-// Leitner box visualization
-echo html_writer::start_div('leitnerflow-boxes d-flex gap-1 mb-3');
-for ($b = 1; $b <= (int)$leitnerflow->boxcount; $b++) {
-    $active = ($b === $currentbox);
-    $boxclass = 'leitnerflow-box badge ' . ($active ? 'bg-primary' : 'bg-light text-dark border');
-    echo html_writer::span("□ {$b}", $boxclass);
-}
-$needmore = (int)$leitnerflow->correcttolearn - $correctcount;
+echo html_writer::span($boxlabel, 'leitnerflow-box-badge');
 echo html_writer::span(
-    "{$correctcount} / {$leitnerflow->correcttolearn} ✓",
-    'ms-2 small text-muted'
+    html_writer::tag('b', $session->questionscorrect) . ' / ' . $session->questionsasked
+    . ' ' . get_string('correct', 'mod_leitnerflow'),
+    'leitnerflow-score'
 );
 echo html_writer::end_div();
+
+// Progress bar.
+echo html_writer::start_div('progress mb-2', ['style' => 'height: 4px;']);
+echo html_writer::div('', 'progress-bar',
+    ['style' => "width:{$progresspct}%; background: linear-gradient(90deg, #194866, #65a1b3);",
+     'role' => 'progressbar',
+     'aria-valuenow' => $progresspct, 'aria-valuemin' => 0, 'aria-valuemax' => 100,
+     'aria-label' => get_string('progress') . ': ' . $progresspct . '%']);
+echo html_writer::end_div();
+
+// ---- Box-flow pills ----
+$boxcount = (int) $leitnerflow->boxcount;
+echo html_writer::start_div('leitnerflow-box-flow', [
+    'role' => 'navigation',
+    'aria-label' => get_string('boxdistribution', 'mod_leitnerflow'),
+]);
+for ($b = 1; $b <= $boxcount; $b++) {
+    $pillclass = 'leitnerflow-box-pill';
+    if ($b === $currentbox) {
+        $pillclass .= ' active';
+    }
+    echo html_writer::span(
+        get_string('box_n', 'mod_leitnerflow', $b),
+        $pillclass,
+        ['aria-label' => get_string('box_n', 'mod_leitnerflow', $b) . ($b === $currentbox ? ' (' . get_string('current', 'mod_leitnerflow') . ')' : '')]
+    );
+    if ($b < $boxcount) {
+        echo html_writer::span('&#10140;', 'box-arrow', ['aria-hidden' => 'true']);
+    }
+}
+echo html_writer::span('&#10140;', 'box-arrow', ['aria-hidden' => 'true']);
+echo html_writer::span(
+    '&#10003; ' . get_string('learned', 'mod_leitnerflow'),
+    'leitnerflow-box-pill learned',
+    ['aria-label' => get_string('learned', 'mod_leitnerflow')]
+);
+echo html_writer::end_div();
+
 echo html_writer::end_div(); // attempt-header
 
-// Question form
+// ---- Question form ----
 $actionurl = new moodle_url('/mod/leitnerflow/attempt.php', ['id' => $cmid, 'sessid' => $sessid]);
 echo html_writer::start_tag('form', [
     'method'  => 'post',
@@ -247,29 +261,30 @@ echo html_writer::start_tag('form', [
 echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
 echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'attempt', 'value' => 1]);
 
-// Render the question itself
+// Render the question (Moodle's behaviour provides the Check button).
 echo html_writer::start_div('leitnerflow-question-container card mb-3');
 echo html_writer::start_div('card-body');
 echo $quba->render_question($slot, $displayoptions, ($currentindex + 1) . '');
 echo html_writer::end_div();
 echo html_writer::end_div();
 
-// Submit button
-echo html_writer::start_div('d-grid gap-2 d-sm-flex');
-echo html_writer::tag('button', get_string('check', 'mod_leitnerflow'), [
-    'type'  => 'submit',
-    'class' => 'btn btn-primary btn-lg flex-fill',
-    'id'    => 'leitnerflow-check-btn',
-]);
-echo html_writer::end_div();
-
 echo html_writer::end_tag('form');
 
-// Back to overview link
-echo html_writer::div(
-    html_writer::link($viewurl, get_string('modulenameplural', 'mod_leitnerflow'), ['class' => 'text-muted small']),
-    'mt-3 text-center'
+// ---- Bottom bar: cancel session link ----
+echo html_writer::start_div('d-flex justify-content-between align-items-center mt-2');
+$cancelurl = new moodle_url('/mod/leitnerflow/view.php', [
+    'id' => $cm->id,
+    'cancelsession' => 1,
+    'sesskey' => sesskey(),
+]);
+echo html_writer::link($cancelurl,
+    get_string('cancelsession', 'mod_leitnerflow'),
+    ['class' => 'leitnerflow-cancel-link']);
+echo html_writer::span(
+    get_string('nextaftercheck', 'mod_leitnerflow'),
+    'text-muted small'
 );
+echo html_writer::end_div();
 
 echo $OUTPUT->footer();
 

@@ -1,10 +1,33 @@
-/* mod_leitnerflow styles — auto-loaded by Moodle from plugin root. */
+/* mod_leitnerflow styles — eLeDia brand colors, WCAG AA accessible. */
 
-/* ---- Progress dashboard card ---- */
+/* ---- eLeDia Brand Color Variables ---- */
+:root {
+    --lf-dark-blue: #194866;
+    --lf-light-blue: #65a1b3;
+    --lf-orange: #f98012;
+    --lf-dark-orange: #b35000;
+    --lf-pale-orange: #ffecdb;
+    --lf-middle-orange: #fcbc82;
+    --lf-black: #353535;
+    --lf-white: #ffffff;
+    --lf-pale-gray: #f3f5f8;
+    --lf-light-gray: #e9e9e9;
+    --lf-super-light-blue: #a9cbd5;
+    --lf-very-dark-blue: #0f2b3d;
+    --lf-aqua: #3aadaa;
+    --lf-dark-aqua: #267372;
+    --lf-pale-aqua: #d1eceb;
+    --lf-green: #669933;
+    --lf-dark-green: #334d1a;
+    --lf-pale-green: #d1e0c1;
+    --lf-dark-gray: #707070;
+}
+
+/* ---- Dashboard card ---- */
 .leitnerflow-dashboard {
     border: none;
     border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 12px rgba(25, 72, 102, 0.1);
     overflow: hidden;
 }
 
@@ -16,118 +39,15 @@
     font-weight: 600;
     font-size: 1.1rem;
     margin-bottom: 1.25rem;
-    color: #333;
+    color: var(--lf-dark-blue);
 }
 
-/* ---- Stat items row ---- */
-.leitnerflow-stats {
-    display: flex;
-    gap: 0.75rem;
-    margin-bottom: 1.25rem;
-    flex-wrap: wrap;
-}
-
-.leitnerflow-stat-item {
-    flex: 1;
-    min-width: 90px;
-    text-align: center;
-    padding: 0.75rem 0.5rem;
-    border-radius: 10px;
-    background: #f8f9fa;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.leitnerflow-stat-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.leitnerflow-stat-item .stat-value {
-    font-size: 1.75rem;
-    font-weight: 700;
-    line-height: 1.2;
-}
-
-.leitnerflow-stat-item .stat-label {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #6c757d;
-    margin-top: 0.25rem;
-}
-
-.leitnerflow-stat-item.stat-total {
-    background: linear-gradient(135deg, #e8eaf6 0%, #f3e5f5 100%);
-}
-
-.leitnerflow-stat-item.stat-total .stat-value {
-    color: #5c6bc0;
-}
-
-.leitnerflow-stat-item.stat-learned {
-    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-}
-
-.leitnerflow-stat-item.stat-learned .stat-value {
-    color: #2e7d32;
-}
-
-.leitnerflow-stat-item.stat-open {
-    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-}
-
-.leitnerflow-stat-item.stat-open .stat-value {
-    color: #e65100;
-}
-
-.leitnerflow-stat-item.stat-errors {
-    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
-}
-
-.leitnerflow-stat-item.stat-errors .stat-value {
-    color: #c62828;
-}
-
-/* ---- Multi-segment progress bar ---- */
-.leitnerflow-progressbar {
-    height: 10px;
-    border-radius: 5px;
-    overflow: hidden;
-    background: #e9ecef;
-    margin-bottom: 1.5rem;
-    display: flex;
-}
-
-.leitnerflow-progressbar .segment {
-    height: 100%;
-    transition: width 0.6s ease;
-}
-
-.leitnerflow-progressbar .segment-learned {
-    background: linear-gradient(90deg, #43a047, #66bb6a);
-}
-
-.leitnerflow-progressbar .segment-open {
-    background: linear-gradient(90deg, #fb8c00, #ffa726);
-}
-
-.leitnerflow-progressbar .segment-errors {
-    background: linear-gradient(90deg, #e53935, #ef5350);
-}
-
-/* ---- Leitner boxes visual ---- */
-.leitnerflow-boxes-title {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 0.75rem;
-}
-
+/* ---- Leitner boxes visual (View Page) ---- */
 .leitnerflow-boxes {
     display: flex;
     gap: 0;
-    align-items: flex-end;
-    margin-bottom: 1.5rem;
+    align-items: stretch;
+    margin-bottom: 0.5rem;
     position: relative;
     padding: 0 0.25rem;
 }
@@ -138,32 +58,27 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-    min-width: 60px;
+    min-width: 0;
 }
 
 .leitnerflow-box-visual {
     width: 100%;
-    max-width: 100px;
-    aspect-ratio: 1 / 1;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    text-align: center;
+    padding: 1rem 0.5rem 0.75rem;
+    border-radius: 10px;
     position: relative;
-    border: 2px solid transparent;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: default;
 }
 
 .leitnerflow-box-visual:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(25, 72, 102, 0.12);
 }
 
 .leitnerflow-box-count {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.7rem;
+    font-weight: 800;
     line-height: 1;
 }
 
@@ -173,50 +88,49 @@
 }
 
 .leitnerflow-box-label {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    margin-top: 0.5rem;
+    margin-top: 0.4rem;
     text-transform: uppercase;
     letter-spacing: 0.3px;
-    color: #6c757d;
 }
 
-/* Box color themes */
+/* Box color themes — eLeDia warm→cool, all text very-dark-blue for contrast */
 .leitnerflow-box-1 .leitnerflow-box-visual {
-    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-    border-color: #ef9a9a;
-    color: #c62828;
+    background: var(--lf-pale-orange);
+    color: var(--lf-very-dark-blue);
+    border-top: 3px solid var(--lf-orange);
 }
 
 .leitnerflow-box-2 .leitnerflow-box-visual {
-    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-    border-color: #ffcc80;
-    color: #e65100;
+    background: #fde8d0;
+    color: var(--lf-very-dark-blue);
+    border-top: 3px solid var(--lf-middle-orange);
 }
 
 .leitnerflow-box-3 .leitnerflow-box-visual {
-    background: linear-gradient(135deg, #fff9c4 0%, #fff176 100%);
-    border-color: #fff176;
-    color: #f57f17;
+    background: var(--lf-pale-aqua);
+    color: var(--lf-very-dark-blue);
+    border-top: 3px solid var(--lf-aqua);
 }
 
 .leitnerflow-box-4 .leitnerflow-box-visual {
-    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-    border-color: #a5d6a7;
-    color: #2e7d32;
+    background: rgba(169, 203, 213, 0.35);
+    color: var(--lf-very-dark-blue);
+    border-top: 3px solid var(--lf-light-blue);
 }
 
 .leitnerflow-box-5 .leitnerflow-box-visual {
-    background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
-    border-color: #80cbc4;
-    color: #00695c;
+    background: rgba(101, 161, 179, 0.25);
+    color: var(--lf-very-dark-blue);
+    border-top: 3px solid var(--lf-dark-blue);
 }
 
-/* Learned box (after all numbered boxes) */
+/* Learned box */
 .leitnerflow-box-learned .leitnerflow-box-visual {
-    background: linear-gradient(135deg, #e8f5e9 0%, #a5d6a7 100%);
-    border-color: #66bb6a;
-    color: #1b5e20;
+    background: var(--lf-pale-green);
+    color: var(--lf-dark-green);
+    border-top: 3px solid var(--lf-green);
 }
 
 /* Arrow connectors between boxes */
@@ -224,29 +138,161 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #bdbdbd;
-    font-size: 1.25rem;
-    padding: 0 0.15rem;
+    color: var(--lf-light-gray);
+    font-size: 1.1rem;
+    padding: 0 0.1rem;
     align-self: center;
-    margin-bottom: 1.25rem;
 }
 
-/* ---- Action button area ---- */
+/* ---- Multi-segment progress bar (thick, under boxes) ---- */
+.leitnerflow-progressbar {
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--lf-light-gray);
+    margin-bottom: 0.25rem;
+    display: flex;
+}
+
+.leitnerflow-progressbar .segment {
+    height: 100%;
+    transition: width 0.6s ease;
+}
+
+.leitnerflow-progressbar .seg-box1 {
+    background: var(--lf-orange);
+}
+
+.leitnerflow-progressbar .seg-box2 {
+    background: var(--lf-middle-orange);
+}
+
+.leitnerflow-progressbar .seg-box3 {
+    background: var(--lf-aqua);
+}
+
+.leitnerflow-progressbar .seg-box4 {
+    background: var(--lf-light-blue);
+}
+
+.leitnerflow-progressbar .seg-box5 {
+    background: var(--lf-dark-blue);
+}
+
+.leitnerflow-progressbar .seg-learned {
+    background: var(--lf-green);
+}
+
+/* Legacy 3-segment bar (learned/open/errors) */
+.leitnerflow-progressbar .segment-learned {
+    background: var(--lf-green);
+}
+
+.leitnerflow-progressbar .segment-open {
+    background: var(--lf-orange);
+}
+
+.leitnerflow-progressbar .segment-errors {
+    background: var(--lf-dark-orange);
+}
+
+.leitnerflow-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--lf-dark-gray);
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+/* ---- Session banner ---- */
+.leitnerflow-session-banner {
+    background: rgba(169, 203, 213, 0.25);
+    border: 1px solid var(--lf-super-light-blue);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: var(--lf-dark-blue);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.leitnerflow-session-banner .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--lf-dark-blue);
+    animation: lf-pulse 1.5s infinite;
+    flex-shrink: 0;
+}
+
+@keyframes lf-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* ---- Session action buttons ---- */
 .leitnerflow-actions {
     margin-top: 0.5rem;
 }
 
-.leitnerflow-actions .btn {
-    border-radius: 8px;
-    padding: 0.6rem 1.5rem;
-    font-weight: 600;
+.leitnerflow-session-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
 }
 
-/* ---- Celebration for all-learned ---- */
+.leitnerflow-session-buttons .btn {
+    flex: 1;
+    min-width: 140px;
+    min-height: 48px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.leitnerflow-session-buttons .btn:focus-visible {
+    outline: 3px solid var(--lf-orange);
+    outline-offset: 2px;
+}
+
+.leitnerflow-btn-start {
+    background: var(--lf-dark-blue) !important;
+    color: var(--lf-white) !important;
+    border: none !important;
+}
+
+.leitnerflow-btn-start:hover {
+    background: var(--lf-very-dark-blue) !important;
+}
+
+.leitnerflow-btn-new {
+    background: var(--lf-white) !important;
+    color: var(--lf-dark-blue) !important;
+    border: 2px solid var(--lf-dark-blue) !important;
+}
+
+.leitnerflow-btn-new:hover {
+    background: rgba(169, 203, 213, 0.2) !important;
+}
+
+.leitnerflow-btn-cancel {
+    background: var(--lf-white) !important;
+    color: var(--lf-dark-orange) !important;
+    border: 2px solid var(--lf-dark-orange) !important;
+}
+
+.leitnerflow-btn-cancel:hover {
+    background: var(--lf-pale-orange) !important;
+}
+
+/* ---- Celebration (all learned) ---- */
 .leitnerflow-alllearned {
     text-align: center;
     padding: 1.5rem;
-    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    background: linear-gradient(135deg, var(--lf-pale-green), var(--lf-pale-aqua));
     border-radius: 12px;
     margin-bottom: 1rem;
 }
@@ -259,5 +305,103 @@
 .leitnerflow-alllearned .celebration-text {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #2e7d32;
+    color: var(--lf-dark-green);
+}
+
+/* ---- Attempt page ---- */
+.leitnerflow-attempt-header {
+    margin-bottom: 1rem;
+}
+
+/* Box-flow pills on attempt page */
+.leitnerflow-box-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 0.75rem 1rem;
+    background: var(--lf-pale-gray);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.leitnerflow-box-pill {
+    padding: 0.35rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 2px solid var(--lf-light-gray);
+    color: var(--lf-dark-gray);
+    background: var(--lf-white);
+    transition: all 0.3s;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+}
+
+.leitnerflow-box-pill.active {
+    border-color: var(--lf-dark-blue);
+    color: var(--lf-dark-blue);
+    background: rgba(169, 203, 213, 0.25);
+    transform: scale(1.05);
+}
+
+.leitnerflow-box-pill.learned {
+    border-color: var(--lf-dark-green);
+    color: var(--lf-white);
+    background: var(--lf-dark-green);
+}
+
+.leitnerflow-box-flow .box-arrow {
+    color: var(--lf-light-gray);
+    font-size: 0.9rem;
+}
+
+/* Score display */
+.leitnerflow-score {
+    font-size: 0.85rem;
+    color: var(--lf-black);
+}
+
+.leitnerflow-score b {
+    color: var(--lf-dark-green);
+}
+
+/* Session cancel link */
+.leitnerflow-cancel-link {
+    color: var(--lf-dark-gray) !important;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.leitnerflow-cancel-link:hover {
+    color: var(--lf-dark-orange) !important;
+}
+
+.leitnerflow-cancel-link:focus-visible {
+    outline: 3px solid var(--lf-orange);
+    outline-offset: 2px;
+}
+
+/* Hide plugin's duplicate check button — Moodle's behaviour button is used */
+.leitnerflow-question-form > .d-grid {
+    display: none !important;
+}
+
+/* Box badge on attempt page */
+.leitnerflow-box-badge {
+    background: var(--lf-dark-blue);
+    color: var(--lf-white);
+    padding: 0.2rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* ---- Teacher report button ---- */
+.leitnerflow-teacher-actions {
+    margin-top: 1rem;
 }
