@@ -34,9 +34,9 @@ function leitnerflow_add_instance(stdClass $data, $mform = null): int {
     global $DB;
     $data->timecreated  = time();
     $data->timemodified = time();
-    $id = $DB->insert_record('leitnerflow', $data);
+    $data->id = $DB->insert_record('leitnerflow', $data);
     leitnerflow_grade_item_update($data);
-    return $id;
+    return $data->id;
 }
 
 function leitnerflow_update_instance(stdClass $data, $mform = null): bool {

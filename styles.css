@@ -1,0 +1,263 @@
+/* mod_leitnerflow styles — auto-loaded by Moodle from plugin root. */
+
+/* ---- Progress dashboard card ---- */
+.leitnerflow-dashboard {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.leitnerflow-dashboard .card-body {
+    padding: 1.5rem;
+}
+
+.leitnerflow-dashboard .card-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 1.25rem;
+    color: #333;
+}
+
+/* ---- Stat items row ---- */
+.leitnerflow-stats {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.leitnerflow-stat-item {
+    flex: 1;
+    min-width: 90px;
+    text-align: center;
+    padding: 0.75rem 0.5rem;
+    border-radius: 10px;
+    background: #f8f9fa;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.leitnerflow-stat-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.leitnerflow-stat-item .stat-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.leitnerflow-stat-item .stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+.leitnerflow-stat-item.stat-total {
+    background: linear-gradient(135deg, #e8eaf6 0%, #f3e5f5 100%);
+}
+
+.leitnerflow-stat-item.stat-total .stat-value {
+    color: #5c6bc0;
+}
+
+.leitnerflow-stat-item.stat-learned {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+}
+
+.leitnerflow-stat-item.stat-learned .stat-value {
+    color: #2e7d32;
+}
+
+.leitnerflow-stat-item.stat-open {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+}
+
+.leitnerflow-stat-item.stat-open .stat-value {
+    color: #e65100;
+}
+
+.leitnerflow-stat-item.stat-errors {
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+}
+
+.leitnerflow-stat-item.stat-errors .stat-value {
+    color: #c62828;
+}
+
+/* ---- Multi-segment progress bar ---- */
+.leitnerflow-progressbar {
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #e9ecef;
+    margin-bottom: 1.5rem;
+    display: flex;
+}
+
+.leitnerflow-progressbar .segment {
+    height: 100%;
+    transition: width 0.6s ease;
+}
+
+.leitnerflow-progressbar .segment-learned {
+    background: linear-gradient(90deg, #43a047, #66bb6a);
+}
+
+.leitnerflow-progressbar .segment-open {
+    background: linear-gradient(90deg, #fb8c00, #ffa726);
+}
+
+.leitnerflow-progressbar .segment-errors {
+    background: linear-gradient(90deg, #e53935, #ef5350);
+}
+
+/* ---- Leitner boxes visual ---- */
+.leitnerflow-boxes-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 0.75rem;
+}
+
+.leitnerflow-boxes {
+    display: flex;
+    gap: 0;
+    align-items: flex-end;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding: 0 0.25rem;
+}
+
+.leitnerflow-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    min-width: 60px;
+}
+
+.leitnerflow-box-visual {
+    width: 100%;
+    max-width: 100px;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: 2px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: default;
+}
+
+.leitnerflow-box-visual:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.leitnerflow-box-count {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.leitnerflow-box-icon {
+    font-size: 1rem;
+    margin-bottom: 0.15rem;
+}
+
+.leitnerflow-box-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: #6c757d;
+}
+
+/* Box color themes */
+.leitnerflow-box-1 .leitnerflow-box-visual {
+    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+    border-color: #ef9a9a;
+    color: #c62828;
+}
+
+.leitnerflow-box-2 .leitnerflow-box-visual {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    border-color: #ffcc80;
+    color: #e65100;
+}
+
+.leitnerflow-box-3 .leitnerflow-box-visual {
+    background: linear-gradient(135deg, #fff9c4 0%, #fff176 100%);
+    border-color: #fff176;
+    color: #f57f17;
+}
+
+.leitnerflow-box-4 .leitnerflow-box-visual {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    border-color: #a5d6a7;
+    color: #2e7d32;
+}
+
+.leitnerflow-box-5 .leitnerflow-box-visual {
+    background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
+    border-color: #80cbc4;
+    color: #00695c;
+}
+
+/* Learned box (after all numbered boxes) */
+.leitnerflow-box-learned .leitnerflow-box-visual {
+    background: linear-gradient(135deg, #e8f5e9 0%, #a5d6a7 100%);
+    border-color: #66bb6a;
+    color: #1b5e20;
+}
+
+/* Arrow connectors between boxes */
+.leitnerflow-box-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bdbdbd;
+    font-size: 1.25rem;
+    padding: 0 0.15rem;
+    align-self: center;
+    margin-bottom: 1.25rem;
+}
+
+/* ---- Action button area ---- */
+.leitnerflow-actions {
+    margin-top: 0.5rem;
+}
+
+.leitnerflow-actions .btn {
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+}
+
+/* ---- Celebration for all-learned ---- */
+.leitnerflow-alllearned {
+    text-align: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.leitnerflow-alllearned .celebration-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.leitnerflow-alllearned .celebration-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2e7d32;
+}

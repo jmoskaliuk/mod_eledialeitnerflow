@@ -79,66 +79,104 @@ if ($canAttempt) {
         'status'        => 0,
     ]);
 
-    // Render progress card
-    $percent = $stats->total > 0 ? ($stats->learned / $stats->total * 100) : 0;
-
-    echo html_writer::start_div('leitnerflow-progress-card card mb-4');
+    // ---- Dashboard card ----
+    echo html_writer::start_div('leitnerflow-dashboard card mb-4');
     echo html_writer::start_div('card-body');
     echo html_writer::tag('h5', get_string('yourprogress', 'mod_leitnerflow'), ['class' => 'card-title']);
 
-    // Stats row
-    echo html_writer::start_div('row text-center mb-3');
+    // Stats tiles
+    echo html_writer::start_div('leitnerflow-stats');
     $statitems = [
-        ['label' => get_string('totalcards', 'mod_leitnerflow'), 'value' => $stats->total,   'class' => ''],
-        ['label' => get_string('learned',    'mod_leitnerflow'), 'value' => $stats->learned,  'class' => 'text-success'],
-        ['label' => get_string('open',       'mod_leitnerflow'), 'value' => $stats->open,     'class' => 'text-warning'],
-        ['label' => get_string('witherrors', 'mod_leitnerflow'), 'value' => $stats->errors,   'class' => 'text-danger'],
+        ['label' => get_string('totalcards', 'mod_leitnerflow'), 'value' => $stats->total,   'css' => 'stat-total'],
+        ['label' => get_string('learned',    'mod_leitnerflow'), 'value' => $stats->learned,  'css' => 'stat-learned'],
+        ['label' => get_string('open',       'mod_leitnerflow'), 'value' => $stats->open,     'css' => 'stat-open'],
+        ['label' => get_string('witherrors', 'mod_leitnerflow'), 'value' => $stats->errors,   'css' => 'stat-errors'],
     ];
     foreach ($statitems as $item) {
-        echo html_writer::start_div('col-3');
-        echo html_writer::tag('div', $item['value'], ['class' => 'h3 mb-0 ' . $item['class']]);
-        echo html_writer::tag('small', $item['label'], ['class' => 'text-muted']);
+        echo html_writer::start_div('leitnerflow-stat-item ' . $item['css']);
+        echo html_writer::tag('div', $item['value'], ['class' => 'stat-value']);
+        echo html_writer::tag('div', $item['label'], ['class' => 'stat-label']);
         echo html_writer::end_div();
     }
     echo html_writer::end_div();
 
-    // Progress bar
+    // Multi-segment progress bar
     if ($stats->total > 0) {
-        echo html_writer::start_div('progress mb-3', ['style' => 'height: 12px;']);
-        $learnedpct = ($stats->learned / $stats->total * 100);
-        $openpct    = ($stats->open    / $stats->total * 100);
-        $errorpct   = ($stats->errors  / $stats->total * 100);
-        echo html_writer::div('', 'progress-bar bg-success',
-            ['style' => "width:{$learnedpct}%", 'title' => get_string('learned', 'mod_leitnerflow')]);
-        echo html_writer::div('', 'progress-bar bg-warning',
-            ['style' => "width:{$openpct}%", 'title' => get_string('open', 'mod_leitnerflow')]);
-        echo html_writer::div('', 'progress-bar bg-danger',
-            ['style' => "width:{$errorpct}%", 'title' => get_string('witherrors', 'mod_leitnerflow')]);
+        $learnedpct = round($stats->learned / $stats->total * 100, 1);
+        $openpct    = round($stats->open    / $stats->total * 100, 1);
+        $errorpct   = round($stats->errors  / $stats->total * 100, 1);
+
+        echo html_writer::start_div('leitnerflow-progressbar');
+        echo html_writer::div('', 'segment segment-learned',
+            ['style' => "width:{$learnedpct}%",
+             'title' => get_string('learned', 'mod_leitnerflow') . ": {$learnedpct}%"]);
+        echo html_writer::div('', 'segment segment-open',
+            ['style' => "width:{$openpct}%",
+             'title' => get_string('open', 'mod_leitnerflow') . ": {$openpct}%"]);
+        echo html_writer::div('', 'segment segment-errors',
+            ['style' => "width:{$errorpct}%",
+             'title' => get_string('witherrors', 'mod_leitnerflow') . ": {$errorpct}%"]);
         echo html_writer::end_div();
     }
 
-    // Box distribution
+    // ---- Leitner box visualization ----
     $boxdist = leitner_engine::get_box_distribution(
         $leitnerflow->id, $USER->id, $leitnerflow->questioncategoryid, $leitnerflow->boxcount
     );
-    echo html_writer::start_div('d-flex gap-2 mb-3 flex-wrap');
-    for ($b = 1; $b <= (int)$leitnerflow->boxcount; $b++) {
-        $badgeclass = ($b === 1) ? 'bg-danger' : (($b === $leitnerflow->boxcount) ? 'bg-warning' : 'bg-secondary');
-        echo html_writer::span(
-            "Box {$b}: " . ($boxdist[$b] ?? 0),
-            'badge ' . $badgeclass . ' text-white'
-        );
+    $boxcount = (int) $leitnerflow->boxcount;
+
+    echo html_writer::tag('div', get_string('leitnersettings', 'mod_leitnerflow'),
+        ['class' => 'leitnerflow-boxes-title']);
+
+    echo html_writer::start_div('leitnerflow-boxes');
+
+    for ($b = 1; $b <= $boxcount; $b++) {
+        $count = $boxdist[$b] ?? 0;
+        // Box card
+        echo html_writer::start_div("leitnerflow-box leitnerflow-box-{$b}");
+        echo html_writer::start_div('leitnerflow-box-visual');
+        echo html_writer::tag('div', $count, ['class' => 'leitnerflow-box-count']);
+        echo html_writer::end_div();
+        $boxlabel = ($b === 1)
+            ? get_string('box_1', 'mod_leitnerflow')
+            : get_string('box_n', 'mod_leitnerflow', $b);
+        echo html_writer::tag('div', $boxlabel, ['class' => 'leitnerflow-box-label']);
+        echo html_writer::end_div();
+
+        // Arrow between boxes (not after last)
+        if ($b < $boxcount) {
+            echo html_writer::tag('div', '&#10140;', ['class' => 'leitnerflow-box-arrow']);
+        }
     }
+
+    // Arrow before learned box
+    echo html_writer::tag('div', '&#10140;', ['class' => 'leitnerflow-box-arrow']);
+
+    // Learned box
+    echo html_writer::start_div('leitnerflow-box leitnerflow-box-learned');
+    echo html_writer::start_div('leitnerflow-box-visual');
+    echo html_writer::tag('div', '&#10003;', ['class' => 'leitnerflow-box-icon']);
+    echo html_writer::tag('div', $stats->learned, ['class' => 'leitnerflow-box-count']);
     echo html_writer::end_div();
+    echo html_writer::tag('div', get_string('box_learned', 'mod_leitnerflow'),
+        ['class' => 'leitnerflow-box-label']);
+    echo html_writer::end_div();
+
+    echo html_writer::end_div(); // leitnerflow-boxes
 
     echo html_writer::end_div(); // card-body
     echo html_writer::end_div(); // card
 
-    // Action button
+    // ---- Action area ----
+    echo html_writer::start_div('leitnerflow-actions');
     if ($stats->total === 0) {
         echo $OUTPUT->notification(get_string('nocardsinpool', 'mod_leitnerflow'), 'warning');
     } elseif ($stats->learned >= $stats->total) {
-        echo $OUTPUT->notification(get_string('alllearned', 'mod_leitnerflow'), 'success');
+        echo html_writer::start_div('leitnerflow-alllearned');
+        echo html_writer::tag('div', '&#127881;', ['class' => 'celebration-icon']);
+        echo html_writer::tag('div', get_string('alllearned', 'mod_leitnerflow'),
+            ['class' => 'celebration-text']);
+        echo html_writer::end_div();
     } elseif ($activesession) {
         $continueurl = new moodle_url('/mod/leitnerflow/attempt.php', [
             'id'     => $cm->id,
@@ -157,6 +195,7 @@ if ($canAttempt) {
             'mb-3'
         );
     }
+    echo html_writer::end_div(); // leitnerflow-actions
 }
 
 // ---- Teacher view ----------------------------------------------------------
