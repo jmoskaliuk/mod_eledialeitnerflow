@@ -95,13 +95,14 @@ $avgpct = count($students) > 0
     ? round(array_sum(array_map(fn($s) => $s->stats->percent_learned, $students)) / count($students))
     : 0;
 
+// Total questions in pool (same for all students).
+$questioncount = !empty($students) ? reset($students)->stats->total : 0;
+
 echo html_writer::start_div('row mb-4');
 $summaries = [
     [get_string('participants'), count($students), 'bg-primary'],
-    [get_string('learned', 'mod_leitnerflow') . ' (Ø ' . get_string('participants') . ')',
-        round($totallearned / max(1, count($students))) . ' / '
-        . round($totalcards / max(1, count($students))), 'bg-success'],
-    ['Ø % ' . get_string('learned', 'mod_leitnerflow'), $avgpct . ' %', 'bg-info'],
+    [get_string('questionsinpool', 'mod_leitnerflow'), $questioncount, 'bg-secondary'],
+    [get_string('avglearnedpercent', 'mod_leitnerflow'), $avgpct . ' %', 'bg-success'],
 ];
 foreach ($summaries as $sum) {
     echo html_writer::start_div('col-md-4 mb-2');

@@ -123,6 +123,9 @@ $string['practiceboxn']       = 'Practice Box {$a}';
 $string['nocardsinthisbox']   = 'No cards in Box {$a} right now.';
 
 // Report page.
+$string['questionsinpool']    = 'Questions in pool';
+$string['avglearnedpercent']  = 'Avg. % learned';
+$string['endsession']         = 'End session';
 $string['report']        = 'Student overview';
 $string['lastsession']   = 'Last session';
 $string['nostudents']    = 'No students have started this activity yet.';

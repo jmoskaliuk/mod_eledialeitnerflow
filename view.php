@@ -225,6 +225,85 @@ if ($canattempt) {
     echo html_writer::end_div(); // card-body
     echo html_writer::end_div(); // card
 
+    // ---- Session action area ----
+    echo html_writer::start_div('mt-3 mb-4');
+
+    if ($stats->total === 0) {
+        echo $OUTPUT->notification(get_string('nocardsinpool', 'mod_leitnerflow'), 'warning');
+
+    } else if ($stats->learned >= $stats->total) {
+        // All learned — Moodle alert + celebration.
+        echo html_writer::start_div('alert alert-success d-flex align-items-center', ['role' => 'status']);
+        echo html_writer::span('&#127881;', 'mr-2 me-2', ['aria-hidden' => 'true', 'style' => 'font-size: 1.5rem;']);
+        echo html_writer::tag('strong', get_string('alllearned', 'mod_leitnerflow'));
+        echo html_writer::end_div();
+
+        echo html_writer::start_div('d-flex gap-2 flex-wrap');
+        $reseturl = new moodle_url('/mod/leitnerflow/view.php', [
+            'id' => $cm->id,
+            'resetuserid' => $USER->id,
+            'sesskey' => sesskey(),
+        ]);
+        echo html_writer::link($reseturl,
+            get_string('resetandrestart', 'mod_leitnerflow'),
+            ['class' => 'btn btn-outline-secondary']);
+        echo html_writer::end_div();
+
+    } else if ($activesession) {
+        // Active session — Moodle alert as session banner.
+        $answered = (int) $activesession->questionsasked;
+        $totalq   = count(json_decode($activesession->questionids, true));
+        $correctq = (int) $activesession->questionscorrect;
+
+        echo html_writer::start_div('alert alert-info', ['role' => 'status']);
+        echo get_string('activesessioninfo', 'mod_leitnerflow', (object) [
+            'answered' => $answered,
+            'total'    => $totalq,
+            'correct'  => $correctq,
+        ]);
+        echo html_writer::end_div();
+
+        echo html_writer::start_div('d-flex gap-2 flex-wrap');
+
+        // Continue session (primary).
+        $continueurl = new moodle_url('/mod/leitnerflow/attempt.php', [
+            'id'     => $cm->id,
+            'sessid' => $activesession->id,
+        ]);
+        echo html_writer::link($continueurl,
+            get_string('continuesession', 'mod_leitnerflow'),
+            ['class' => 'btn btn-primary']);
+
+        // New session.
+        $newurl = new moodle_url('/mod/leitnerflow/attempt.php', ['id' => $cm->id, 'start' => 1]);
+        echo html_writer::link($newurl,
+            get_string('newsession', 'mod_leitnerflow'),
+            ['class' => 'btn btn-outline-secondary']);
+
+        // End session.
+        $cancelurl = new moodle_url('/mod/leitnerflow/view.php', [
+            'id' => $cm->id,
+            'cancelsession' => 1,
+            'sesskey' => sesskey(),
+        ]);
+        echo html_writer::link($cancelurl,
+            get_string('endsession', 'mod_leitnerflow'),
+            ['class' => 'btn btn-outline-danger']);
+
+        echo html_writer::end_div();
+
+    } else {
+        // No active session — start button.
+        echo html_writer::start_div('d-flex');
+        $starturl = new moodle_url('/mod/leitnerflow/attempt.php', ['id' => $cm->id, 'start' => 1]);
+        echo html_writer::link($starturl,
+            get_string('startsession', 'mod_leitnerflow'),
+            ['class' => 'btn btn-primary']);
+        echo html_writer::end_div();
+    }
+
+    echo html_writer::end_div(); // actions
+
     // ---- Session history card (Progress Dashboard) ----
     $sessionhistory = leitner_engine::get_session_history($leitnerflow->id, $USER->id, 5);
     $sessionstats   = leitner_engine::get_session_stats($leitnerflow->id, $USER->id);
@@ -366,84 +445,6 @@ if ($canattempt) {
         echo html_writer::end_div(); // card
     }
 
-    // ---- Session action area ----
-    echo html_writer::start_div('mt-3');
-
-    if ($stats->total === 0) {
-        echo $OUTPUT->notification(get_string('nocardsinpool', 'mod_leitnerflow'), 'warning');
-
-    } else if ($stats->learned >= $stats->total) {
-        // All learned — Moodle alert + celebration.
-        echo html_writer::start_div('alert alert-success d-flex align-items-center', ['role' => 'status']);
-        echo html_writer::span('&#127881;', 'mr-2 me-2', ['aria-hidden' => 'true', 'style' => 'font-size: 1.5rem;']);
-        echo html_writer::tag('strong', get_string('alllearned', 'mod_leitnerflow'));
-        echo html_writer::end_div();
-
-        echo html_writer::start_div('d-flex gap-2 flex-wrap');
-        $reseturl = new moodle_url('/mod/leitnerflow/view.php', [
-            'id' => $cm->id,
-            'resetuserid' => $USER->id,
-            'sesskey' => sesskey(),
-        ]);
-        echo html_writer::link($reseturl,
-            get_string('resetandrestart', 'mod_leitnerflow'),
-            ['class' => 'btn btn-outline-secondary']);
-        echo html_writer::end_div();
-
-    } else if ($activesession) {
-        // Active session — Moodle alert as session banner.
-        $answered = (int) $activesession->questionsasked;
-        $totalq   = count(json_decode($activesession->questionids, true));
-        $correctq = (int) $activesession->questionscorrect;
-
-        echo html_writer::start_div('alert alert-info', ['role' => 'status']);
-        echo get_string('activesessioninfo', 'mod_leitnerflow', (object) [
-            'answered' => $answered,
-            'total'    => $totalq,
-            'correct'  => $correctq,
-        ]);
-        echo html_writer::end_div();
-
-        echo html_writer::start_div('d-flex gap-2 flex-wrap');
-
-        // Continue session (primary).
-        $continueurl = new moodle_url('/mod/leitnerflow/attempt.php', [
-            'id'     => $cm->id,
-            'sessid' => $activesession->id,
-        ]);
-        echo html_writer::link($continueurl,
-            get_string('continuesession', 'mod_leitnerflow'),
-            ['class' => 'btn btn-primary']);
-
-        // New session.
-        $newurl = new moodle_url('/mod/leitnerflow/attempt.php', ['id' => $cm->id, 'start' => 1]);
-        echo html_writer::link($newurl,
-            get_string('newsession', 'mod_leitnerflow'),
-            ['class' => 'btn btn-outline-secondary']);
-
-        // Cancel session.
-        $cancelurl = new moodle_url('/mod/leitnerflow/view.php', [
-            'id' => $cm->id,
-            'cancelsession' => 1,
-            'sesskey' => sesskey(),
-        ]);
-        echo html_writer::link($cancelurl,
-            get_string('cancel'),
-            ['class' => 'btn btn-outline-danger']);
-
-        echo html_writer::end_div();
-
-    } else {
-        // No active session — start button.
-        echo html_writer::start_div('d-flex');
-        $starturl = new moodle_url('/mod/leitnerflow/attempt.php', ['id' => $cm->id, 'start' => 1]);
-        echo html_writer::link($starturl,
-            get_string('startsession', 'mod_leitnerflow'),
-            ['class' => 'btn btn-primary']);
-        echo html_writer::end_div();
-    }
-
-    echo html_writer::end_div(); // actions
 }
 
 // ---- Teacher view ----------------------------------------------------------

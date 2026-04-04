@@ -113,6 +113,9 @@ $string['cardlearned']             = 'Karte als gelernt markiert!';
 $string['cardreset']               = 'Karte auf Box 1 zurückgesetzt.';
 $string['cardbackone']             = 'Karte eine Box zurück verschoben.';
 
+$string['questionsinpool']         = 'Fragen im Pool';
+$string['avglearnedpercent']       = 'Ø % gelernt';
+$string['endsession']              = 'Session beenden';
 $string['report']                  = 'Schülerübersicht';
 $string['student']                 = 'Schüler/in';
 $string['progress']                = 'Fortschritt';
