@@ -182,72 +182,12 @@ $displayoptions->rightanswer     = question_display_options::HIDDEN;
 $displayoptions->history         = question_display_options::HIDDEN;
 $displayoptions->correctness     = question_display_options::HIDDEN;
 
-// Get card state for display.
-$questionid   = $questionids[$currentindex];
-$cardstate    = leitner_engine::get_card_state($leitnerflow->id, $USER->id, $questionid);
-$currentbox   = $cardstate ? (int)$cardstate->currentbox : 1;
-$correctcount = $cardstate ? (int)$cardstate->correctcount : 0;
+$questionid = $questionids[$currentindex];
 
 echo $OUTPUT->header();
 
-// ---- Top bar: question counter, box badge (Moodle badge), score ----
-$progresspct = round(($currentindex / $totalquestions) * 100);
-
-echo html_writer::start_div('mb-3');
-
-echo html_writer::start_div('d-flex justify-content-between align-items-center mb-2');
-echo html_writer::span(
-    get_string('question') . ' ' . ($currentindex + 1) . ' / ' . $totalquestions,
-    'text-muted small'
-);
-echo html_writer::span(
-    html_writer::tag('b', $session->questionscorrect) . ' / ' . $session->questionsasked
-    . ' ' . get_string('correct', 'mod_leitnerflow'),
-    'small text-muted'
-);
-echo html_writer::end_div();
-
-// Moodle progress component.
-echo html_writer::start_div('progress mb-2', ['style' => 'height: 4px;']);
-echo html_writer::div('', 'progress-bar bg-primary',
-    ['style' => "width:{$progresspct}%",
-     'role' => 'progressbar',
-     'aria-valuenow' => $progresspct, 'aria-valuemin' => 0, 'aria-valuemax' => 100,
-     'aria-label' => get_string('progress') . ': ' . $progresspct . '%']);
-echo html_writer::end_div();
-
-// ---- Box-flow pills (custom — Leitner-specific) ----
-$boxcount = (int) $leitnerflow->boxcount;
-echo html_writer::start_div('leitnerflow-box-flow', [
-    'role' => 'navigation',
-    'aria-label' => get_string('boxdistribution', 'mod_leitnerflow'),
-]);
-for ($b = 1; $b <= $boxcount; $b++) {
-    $pillclass = 'badge rounded-pill ';
-    if ($b === $currentbox) {
-        $pillclass .= 'bg-primary';
-    } else {
-        $pillclass .= 'bg-light text-dark border';
-    }
-    echo html_writer::span(
-        get_string('box_n', 'mod_leitnerflow', $b),
-        $pillclass,
-        ['aria-label' => get_string('box_n', 'mod_leitnerflow', $b)
-            . ($b === $currentbox ? ' (' . get_string('current', 'mod_leitnerflow') . ')' : '')]
-    );
-    if ($b < $boxcount) {
-        echo html_writer::span(' &#10140; ', 'text-muted small', ['aria-hidden' => 'true']);
-    }
-}
-echo html_writer::span(' &#10140; ', 'text-muted small', ['aria-hidden' => 'true']);
-echo html_writer::span(
-    '&#10003; ' . get_string('learned', 'mod_leitnerflow'),
-    'badge rounded-pill bg-success',
-    ['aria-label' => get_string('learned', 'mod_leitnerflow')]
-);
-echo html_writer::end_div();
-
-echo html_writer::end_div(); // header
+// ---- Back button (like Moodle Quiz) ----
+echo $OUTPUT->single_button($viewurl, get_string('back'), 'get');
 
 // ---- Question form ----
 $actionurl = new moodle_url('/mod/leitnerflow/attempt.php', ['id' => $cmid, 'sessid' => $sessid]);
@@ -261,36 +201,24 @@ echo html_writer::start_tag('form', [
 echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
 echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'attempt', 'value' => 1]);
 
-// Render the question (Moodle's behaviour provides the Check button).
-echo html_writer::start_div('card mb-3');
-echo html_writer::start_div('card-body');
+// Render the question directly (Moodle's behaviour provides the Check button).
 echo $quba->render_question($slot, $displayoptions, ($currentindex + 1) . '');
-echo html_writer::end_div();
-echo html_writer::end_div();
 
 echo html_writer::end_tag('form');
 
-// ---- Bottom bar: view progress + cancel session buttons ----
-echo html_writer::start_div('d-flex justify-content-between align-items-center mt-2');
-
-// Left: action buttons.
-echo html_writer::start_div('d-flex gap-2');
-echo html_writer::link($viewurl,
-    get_string('yourprogress', 'mod_leitnerflow'),
-    ['class' => 'btn btn-outline-secondary btn-sm']);
+// ---- Bottom navigation (like Moodle Quiz: secondary left, info right) ----
 $cancelurl = new moodle_url('/mod/leitnerflow/view.php', [
     'id' => $cm->id,
     'cancelsession' => 1,
     'sesskey' => sesskey(),
 ]);
-echo html_writer::link($cancelurl,
-    get_string('cancelsession', 'mod_leitnerflow'),
-    ['class' => 'btn btn-outline-danger btn-sm']);
-echo html_writer::end_div();
-
-// Right: hint text.
+echo html_writer::start_div('d-flex justify-content-between align-items-center mt-3 mb-3');
+echo $OUTPUT->single_button($cancelurl, get_string('cancelsession', 'mod_leitnerflow'), 'get');
 echo html_writer::span(
-    get_string('nextaftercheck', 'mod_leitnerflow'),
+    get_string('question') . ' ' . ($currentindex + 1) . ' / ' . $totalquestions
+    . ' &middot; '
+    . html_writer::tag('b', $session->questionscorrect) . ' / ' . $session->questionsasked
+    . ' ' . get_string('correct', 'mod_leitnerflow'),
     'text-muted small'
 );
 echo html_writer::end_div();

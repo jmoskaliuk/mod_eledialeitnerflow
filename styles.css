@@ -128,18 +128,6 @@
 .lf-seg-box5 { background-color: var(--lf-dark-blue) !important; }
 .lf-seg-learned { background-color: var(--lf-green) !important; }
 
-/* ---- Attempt page: box-flow pill bar ---- */
-.leitnerflow-box-flow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    padding: 0.75rem 1rem;
-    background: #f3f5f8;
-    border-radius: 8px;
-    flex-wrap: wrap;
-}
-
 /* Hide plugin's duplicate check button — Moodle's behaviour button is used */
 .leitnerflow-question-form > .d-grid {
     display: none !important;
