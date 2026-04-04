@@ -200,11 +200,6 @@ echo html_writer::span(
     get_string('question') . ' ' . ($currentindex + 1) . ' / ' . $totalquestions,
     'text-muted small'
 );
-// Moodle badge component.
-$boxlabel = ($cardstate && (int)$cardstate->status === leitner_engine::STATUS_LEARNED)
-    ? get_string('learned', 'mod_leitnerflow')
-    : get_string('cardstatus_box', 'mod_leitnerflow', $currentbox);
-echo html_writer::span($boxlabel, 'badge bg-secondary');
 echo html_writer::span(
     html_writer::tag('b', $session->questionscorrect) . ' / ' . $session->questionsasked
     . ' ' . get_string('correct', 'mod_leitnerflow'),

@@ -83,9 +83,7 @@ $string['sessionduration']    = 'Dauer';
 $string['nosessions']         = 'Noch keine abgeschlossenen Sessions.';
 $string['totalsessions']      = '{$a} Sessions abgeschlossen';
 $string['avgcorrect']         = 'Durchschnitt: {$a}% richtig';
-$string['trend_improving']    = 'Aufwärtstrend';
-$string['trend_stable']       = 'Stabil';
-$string['trend_declining']    = 'Übung nötig';
+$string['trend_recent']       = 'Letzte 3 Sessions: {$a->recent}% richtig (Durchschnitt: {$a->avg}%)';
 $string['correctrate']        = 'Richtig';
 
 $string['newsession']         = 'Neue Session';

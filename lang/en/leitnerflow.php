@@ -101,9 +101,7 @@ $string['sessionduration']    = 'Duration';
 $string['nosessions']         = 'No completed sessions yet.';
 $string['totalsessions']      = '{$a} sessions completed';
 $string['avgcorrect']         = 'Average: {$a}% correct';
-$string['trend_improving']    = 'Improving';
-$string['trend_stable']       = 'Stable';
-$string['trend_declining']    = 'Needs practice';
+$string['trend_recent']       = 'Last 3 sessions: {$a->recent}% correct (average: {$a->avg}%)';
 $string['correctrate']        = 'Correct';
 
 // Attempt page.

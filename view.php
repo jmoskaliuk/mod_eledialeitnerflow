@@ -240,19 +240,23 @@ if ($canattempt) {
 
             if ($recentpct > $sessionstats->avgpercent + 5) {
                 $trendclass = 'text-success';
-                $trendicon  = '&#9650;'; // ▲
-                $trendstr   = get_string('trend_improving', 'mod_leitnerflow');
+                $trendicon  = '&#9650;';
             } else if ($recentpct < $sessionstats->avgpercent - 5) {
                 $trendclass = 'text-warning';
-                $trendicon  = '&#9660;'; // ▼
-                $trendstr   = get_string('trend_declining', 'mod_leitnerflow');
+                $trendicon  = '&#9660;';
             } else {
                 $trendclass = 'text-muted';
-                $trendicon  = '&#9670;'; // ◆
-                $trendstr   = get_string('trend_stable', 'mod_leitnerflow');
+                $trendicon  = '&#8776;'; // ≈
             }
+            // Show concrete numbers: "▲ Last 3 sessions: 75% (avg 60%)"
             echo html_writer::div(
-                html_writer::span($trendicon . ' ' . $trendstr, $trendclass . ' small fw-bold'),
+                html_writer::span(
+                    $trendicon . ' ' . get_string('trend_recent', 'mod_leitnerflow', (object) [
+                        'recent' => $recentpct,
+                        'avg'    => $sessionstats->avgpercent,
+                    ]),
+                    $trendclass . ' small'
+                ),
                 'mb-2'
             );
         }
