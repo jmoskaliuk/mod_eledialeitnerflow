@@ -153,6 +153,7 @@ class mod_leitnerflow_mod_form extends moodleform_mod {
         // ---- Display settings -------------------------------------------------
         $mform->addElement('header', 'displaysettingsheader',
             get_string('displaysettings', 'mod_leitnerflow'));
+        $mform->setExpanded('displaysettingsheader', true);
 
         $mform->addElement('selectyesno', 'showanimation',
             get_string('showanimation', 'mod_leitnerflow'));
