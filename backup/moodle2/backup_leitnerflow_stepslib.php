@@ -32,7 +32,7 @@ class backup_leitnerflow_activity_structure_step extends backup_activity_structu
         // Root: leitnerflow instance
         $leitnerflow = new backup_nested_element('leitnerflow', ['id'], [
             'name', 'intro', 'introformat',
-            'questioncategoryid', 'sessionsize', 'boxcount',
+            'questioncategoryid', 'questioncategoryids', 'sessionsize', 'boxcount',
             'correcttolearn', 'wrongbehavior', 'questionrotation',
             'prioritystrategy', 'grade', 'grademethod',
             'timecreated', 'timemodified',

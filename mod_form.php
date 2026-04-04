@@ -73,10 +73,11 @@ class mod_leitnerflow_mod_form extends moodleform_mod {
             $categories = [0 => '---'];
         }
 
-        $mform->addElement('select', 'questioncategoryid',
-            get_string('questioncategory', 'mod_leitnerflow'), $categories);
-        $mform->addHelpButton('questioncategoryid', 'questioncategory', 'mod_leitnerflow');
-        $mform->addRule('questioncategoryid', null, 'required');
+        $mform->addElement('autocomplete', 'questioncategoryids_array',
+            get_string('questioncategory', 'mod_leitnerflow'), $categories,
+            ['multiple' => true]);
+        $mform->addHelpButton('questioncategoryids_array', 'questioncategory', 'mod_leitnerflow');
+        $mform->addRule('questioncategoryids_array', null, 'required');
 
         // Question rotation
         $rotationoptions = [
@@ -151,6 +152,18 @@ class mod_leitnerflow_mod_form extends moodleform_mod {
 
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
+    }
+
+    /**
+     * Pre-process form data for display — convert comma-separated IDs to array.
+     */
+    public function data_preprocessing(&$defaultvalues): void {
+        if (!empty($defaultvalues['questioncategoryids'])) {
+            $defaultvalues['questioncategoryids_array'] = explode(',', $defaultvalues['questioncategoryids']);
+        } else if (!empty($defaultvalues['questioncategoryid'])) {
+            // Legacy fallback.
+            $defaultvalues['questioncategoryids_array'] = [(string) $defaultvalues['questioncategoryid']];
+        }
     }
 
     public function validation($data, $files): array {

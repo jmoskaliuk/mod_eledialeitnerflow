@@ -34,6 +34,7 @@ function leitnerflow_add_instance(stdClass $data, $mform = null): int {
     global $DB;
     $data->timecreated  = time();
     $data->timemodified = time();
+    _leitnerflow_process_categories($data);
     $data->id = $DB->insert_record('leitnerflow', $data);
     leitnerflow_grade_item_update($data);
     return $data->id;
@@ -43,9 +44,28 @@ function leitnerflow_update_instance(stdClass $data, $mform = null): bool {
     global $DB;
     $data->id           = $data->instance;
     $data->timemodified = time();
+    _leitnerflow_process_categories($data);
     $DB->update_record('leitnerflow', $data);
     leitnerflow_grade_item_update($data);
     return true;
+}
+
+/**
+ * Convert the form's category array into comma-separated string for DB storage.
+ *
+ * Also keeps the legacy questioncategoryid field in sync (first selected category).
+ *
+ * @param stdClass $data Form data object (modified in place)
+ */
+function _leitnerflow_process_categories(stdClass &$data): void {
+    if (!empty($data->questioncategoryids_array) && is_array($data->questioncategoryids_array)) {
+        $ids = array_filter(array_map('intval', $data->questioncategoryids_array), fn($id) => $id > 0);
+        $data->questioncategoryids = implode(',', $ids);
+        // Keep legacy field in sync.
+        $data->questioncategoryid = !empty($ids) ? reset($ids) : 0;
+        // Remove the form-only field before DB insert.
+        unset($data->questioncategoryids_array);
+    }
 }
 
 function leitnerflow_delete_instance(int $id): bool {
@@ -156,10 +176,11 @@ function leitnerflow_update_grades(stdClass $leitnerflow, int $userid = 0, bool 
 }
 
 function leitnerflow_get_user_grade(stdClass $leitnerflow, int $userid): array {
+    $categoryids = leitner_engine::get_category_ids($leitnerflow);
     $stats = leitner_engine::get_user_stats(
         $leitnerflow->id,
         $userid,
-        $leitnerflow->questioncategoryid
+        $categoryids
     );
 
     $grade           = new stdClass();
@@ -175,6 +196,7 @@ function leitnerflow_get_all_grades(stdClass $leitnerflow): array {
     $context = \core\context\module::instance($cm->id);
     $students = get_enrolled_users($context, 'mod/leitnerflow:attempt');
 
+    $categoryids = leitner_engine::get_category_ids($leitnerflow);
     $grades = [];
     foreach ($students as $student) {
         $grade           = new stdClass();
@@ -182,7 +204,7 @@ function leitnerflow_get_all_grades(stdClass $leitnerflow): array {
         $stats = leitner_engine::get_user_stats(
             $leitnerflow->id,
             $student->id,
-            $leitnerflow->questioncategoryid
+            $categoryids
         );
         $grade->rawgrade = $stats->percent_learned;
         $grades[$student->id] = $grade;

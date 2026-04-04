@@ -9,7 +9,8 @@
         <FIELD NAME="name"               TYPE="char" LENGTH="255" NOTNULL="true"/>
         <FIELD NAME="intro"              TYPE="text" NOTNULL="false"/>
         <FIELD NAME="introformat"        TYPE="int"  LENGTH="4"  NOTNULL="true" DEFAULT="0"/>
-        <FIELD NAME="questioncategoryid" TYPE="int"  LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="question_categories.id"/>
+        <FIELD NAME="questioncategoryid" TYPE="int"  LENGTH="10" NOTNULL="true" DEFAULT="0" COMMENT="Deprecated — kept for backward compat. Use questioncategoryids."/>
+        <FIELD NAME="questioncategoryids" TYPE="text" NOTNULL="false" COMMENT="Comma-separated question_categories.id values"/>
         <FIELD NAME="sessionsize"        TYPE="int"  LENGTH="4"  NOTNULL="true" DEFAULT="20" COMMENT="Questions per session"/>
         <FIELD NAME="boxcount"           TYPE="int"  LENGTH="2"  NOTNULL="true" DEFAULT="3"  COMMENT="Number of Leitner boxes 3-5"/>
         <FIELD NAME="correcttolearn"     TYPE="int"  LENGTH="2"  NOTNULL="true" DEFAULT="3"  COMMENT="Correct answers needed to mark as learned"/>

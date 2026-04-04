@@ -30,8 +30,8 @@ $string['modulenameplural']   = 'LeitnerFlow Activities';
 $string['modulename_help']    = 'Das Leitner-Quiz nutzt das Karteikartensystem nach Sebastian Leitner (Spaced Repetition), um Schüler beim effizienten Lernen zu unterstützen. Karten wandern je nach Antwort durch Boxen und werden so lange wiederholt, bis sie sicher beherrscht werden.';
 $string['pluginadministration'] = 'LeitnerFlow-Verwaltung';
 
-$string['questioncategory']        = 'Fragenkategorie';
-$string['questioncategory_help']   = 'Wähle die Kategorie aus der Fragensammlung, aus der Fragen gezogen werden.';
+$string['questioncategory']        = 'Fragenkategorien';
+$string['questioncategory_help']   = 'Wähle eine oder mehrere Kategorien aus der Fragensammlung, aus denen Fragen gezogen werden.';
 $string['sessionsize']             = 'Fragen pro Durchgang';
 $string['sessionsize_help']        = 'Wie viele Fragen pro Lernsession gestellt werden.';
 $string['boxcount']                = 'Anzahl Leitner-Boxen';
@@ -73,6 +73,29 @@ $string['sessionresult']           = 'Du hast {$a->correct} von {$a->total} Frag
 $string['alllearned']              = 'Alle Karten gelernt! Hervorragend.';
 $string['nocardsinpool']           = 'Keine Fragen in der gewählten Kategorie gefunden. Bitte füge zuerst Fragen zur Fragensammlung hinzu.';
 $string['nounlearnedcards']        = 'Alle Karten sind bereits gelernt! Du kannst deinen Fortschritt zurücksetzen, um neu zu beginnen.';
+
+// Progress Dashboard — Session-Historie.
+$string['sessionhistory']     = 'Session-Verlauf';
+$string['sessiondate']        = 'Datum';
+$string['sessioncorrectof']   = '{$a->correct} / {$a->total}';
+$string['sessionpercent']     = '{$a}%';
+$string['sessionduration']    = 'Dauer';
+$string['nosessions']         = 'Noch keine abgeschlossenen Sessions.';
+$string['totalsessions']      = '{$a} Sessions abgeschlossen';
+$string['avgcorrect']         = 'Durchschnitt: {$a}% richtig';
+$string['trend_improving']    = 'Aufwärtstrend';
+$string['trend_stable']       = 'Stabil';
+$string['trend_declining']    = 'Übung nötig';
+$string['correctrate']        = 'Richtig';
+
+$string['newsession']         = 'Neue Session';
+$string['cancelsession']      = 'Session abbrechen';
+$string['sessioncancelled']   = 'Session abgebrochen.';
+$string['boxdistribution']    = 'Leitner-Box-Verteilung';
+$string['activesessioninfo']  = 'Aktive Session: {$a->answered} von {$a->total} beantwortet, {$a->correct} richtig';
+$string['resetandrestart']    = 'Zurücksetzen und neu beginnen';
+$string['current']            = 'aktuell';
+$string['nextaftercheck']     = 'Nächste Frage nach Prüfen';
 
 $string['question']                = 'Frage';
 $string['of']                      = 'von';

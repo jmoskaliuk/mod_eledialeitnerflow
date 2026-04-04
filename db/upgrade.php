@@ -27,6 +27,27 @@ defined('MOODLE_INTERNAL') || die();
 function xmldb_leitnerflow_upgrade($oldversion) {
     global $DB;
     $dbman = $DB->get_manager();
-    // Future upgrade steps go here.
+
+    // Add questioncategoryids TEXT field and migrate existing single-category data.
+    if ($oldversion < 2024120106) {
+        $table = new xmldb_table('leitnerflow');
+        $field = new xmldb_field('questioncategoryids', XMLDB_TYPE_TEXT, null, null, null, null, null, 'questioncategoryid');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Migrate: copy existing questioncategoryid into questioncategoryids.
+        $instances = $DB->get_records('leitnerflow', null, '', 'id, questioncategoryid');
+        foreach ($instances as $inst) {
+            if ((int) $inst->questioncategoryid > 0) {
+                $DB->set_field('leitnerflow', 'questioncategoryids',
+                    (string) $inst->questioncategoryid, ['id' => $inst->id]);
+            }
+        }
+
+        upgrade_mod_savepoint(true, 2024120106, 'leitnerflow');
+    }
+
     return true;
 }

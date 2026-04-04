@@ -208,6 +208,28 @@ class leitner_engine {
     }
 
     /**
+     * Get the list of question category IDs from a leitnerflow instance.
+     *
+     * Handles both the new questioncategoryids (comma-separated) field
+     * and the legacy questioncategoryid (single int) field.
+     *
+     * @param \stdClass $leitnerflow
+     * @return array of category IDs
+     */
+    public static function get_category_ids(\stdClass $leitnerflow): array {
+        // Prefer the new multi-category field.
+        if (!empty($leitnerflow->questioncategoryids)) {
+            $ids = array_map('intval', explode(',', $leitnerflow->questioncategoryids));
+            return array_filter($ids, fn($id) => $id > 0);
+        }
+        // Fall back to legacy single field.
+        if (!empty($leitnerflow->questioncategoryid) && (int) $leitnerflow->questioncategoryid > 0) {
+            return [(int) $leitnerflow->questioncategoryid];
+        }
+        return [];
+    }
+
+    /**
      * Get all question IDs from a question category (direct members, no sub-categories).
      *
      * Uses the Moodle 4.x+ Question Bank API (question_bank_entries + question_versions)
@@ -246,6 +268,21 @@ class leitner_engine {
     }
 
     /**
+     * Get all question IDs from multiple question categories.
+     *
+     * @param array $categoryids Array of category IDs
+     * @return array of unique question IDs
+     */
+    public static function get_questions_from_categories(array $categoryids): array {
+        $allids = [];
+        foreach ($categoryids as $catid) {
+            $ids = self::get_questions_from_category((int) $catid);
+            $allids = array_merge($allids, $ids);
+        }
+        return array_values(array_unique($allids));
+    }
+
+    /**
      * Select questions for a session using the Leitner priority algorithm.
      *
      * Priority order (when prioritystrategy = 0):
@@ -259,7 +296,8 @@ class leitner_engine {
      * @return array  Selected question IDs (max: $leitnerflow->sessionsize)
      */
     public static function select_session_questions(\stdClass $leitnerflow, int $userid): array {
-        $allids    = self::get_questions_from_category((int) $leitnerflow->questioncategoryid);
+        $categoryids = self::get_category_ids($leitnerflow);
+        $allids      = self::get_questions_from_categories($categoryids);
         $states    = self::get_all_card_states($leitnerflow->id, $userid);
         $sessionsize = (int) $leitnerflow->sessionsize;
 
@@ -312,11 +350,15 @@ class leitner_engine {
      *
      * @param int $leitnerflowid
      * @param int $userid
-     * @param int $questioncategoryid
+     * @param int|array $questioncategoryid Single category ID or array of IDs
      * @return \stdClass  {total, learned, open, errors, percent_learned}
      */
-    public static function get_user_stats(int $leitnerflowid, int $userid, int $questioncategoryid): \stdClass {
-        $allids = self::get_questions_from_category($questioncategoryid);
+    public static function get_user_stats(int $leitnerflowid, int $userid, int|array $questioncategoryid): \stdClass {
+        if (is_array($questioncategoryid)) {
+            $allids = self::get_questions_from_categories($questioncategoryid);
+        } else {
+            $allids = self::get_questions_from_category($questioncategoryid);
+        }
         $states = self::get_all_card_states($leitnerflowid, $userid);
 
         $total   = count($allids);
@@ -351,17 +393,21 @@ class leitner_engine {
      *
      * @param int $leitnerflowid
      * @param int $userid
-     * @param int $questioncategoryid
+     * @param int|array $questioncategoryid Single category ID or array of IDs
      * @param int $boxcount
      * @return array  [box_number => count]
      */
     public static function get_box_distribution(
         int $leitnerflowid,
         int $userid,
-        int $questioncategoryid,
+        int|array $questioncategoryid,
         int $boxcount
     ): array {
-        $allids  = self::get_questions_from_category($questioncategoryid);
+        if (is_array($questioncategoryid)) {
+            $allids = self::get_questions_from_categories($questioncategoryid);
+        } else {
+            $allids = self::get_questions_from_category($questioncategoryid);
+        }
         $states  = self::get_all_card_states($leitnerflowid, $userid);
         $dist    = array_fill(1, $boxcount, 0);
 
@@ -391,13 +437,14 @@ class leitner_engine {
         global $DB;
 
         $students = get_enrolled_users($context, 'mod/leitnerflow:attempt');
+        $categoryids = self::get_category_ids($leitnerflow);
         $result   = [];
 
         foreach ($students as $student) {
             $stats = self::get_user_stats(
                 $leitnerflow->id,
                 $student->id,
-                $leitnerflow->questioncategoryid
+                $categoryids
             );
 
             // Session count + last session
@@ -424,6 +471,63 @@ class leitner_engine {
         }
 
         return $result;
+    }
+
+    /**
+     * Get completed session history for a user, most recent first.
+     *
+     * @param int $leitnerflowid
+     * @param int $userid
+     * @param int $limit Maximum sessions to return (0 = all)
+     * @return array of session records
+     */
+    public static function get_session_history(int $leitnerflowid, int $userid, int $limit = 10): array {
+        global $DB;
+
+        $sql = "SELECT id, questionsasked, questionscorrect, timecreated, timecompleted
+                  FROM {leitnerflow_sessions}
+                 WHERE leitnerflowid = :lfid
+                   AND userid = :uid
+                   AND status = 1
+              ORDER BY timecompleted DESC";
+
+        $params = ['lfid' => $leitnerflowid, 'uid' => $userid];
+
+        if ($limit > 0) {
+            return array_values($DB->get_records_sql($sql, $params, 0, $limit));
+        }
+        return array_values($DB->get_records_sql($sql, $params));
+    }
+
+    /**
+     * Get aggregate session statistics for a user.
+     *
+     * @param int $leitnerflowid
+     * @param int $userid
+     * @return \stdClass {sessioncount, totalasked, totalcorrect, avgpercent}
+     */
+    public static function get_session_stats(int $leitnerflowid, int $userid): \stdClass {
+        global $DB;
+
+        $sql = "SELECT COUNT(*) AS sessioncount,
+                       COALESCE(SUM(questionsasked), 0) AS totalasked,
+                       COALESCE(SUM(questionscorrect), 0) AS totalcorrect
+                  FROM {leitnerflow_sessions}
+                 WHERE leitnerflowid = :lfid
+                   AND userid = :uid
+                   AND status = 1";
+
+        $row = $DB->get_record_sql($sql, ['lfid' => $leitnerflowid, 'uid' => $userid]);
+
+        $stats = new \stdClass();
+        $stats->sessioncount = (int) $row->sessioncount;
+        $stats->totalasked   = (int) $row->totalasked;
+        $stats->totalcorrect = (int) $row->totalcorrect;
+        $stats->avgpercent   = ($stats->totalasked > 0)
+            ? round(($stats->totalcorrect / $stats->totalasked) * 100)
+            : 0;
+
+        return $stats;
     }
 
     /**

@@ -41,8 +41,8 @@ $string['modulename_help']      = 'The Leitner Flow uses spaced repetition (Leit
 $string['pluginadministration'] = 'LeitnerFlow administration';
 
 // Settings form — short labels, details in _help tooltips.
-$string['questioncategory']          = 'Question category';
-$string['questioncategory_help']     = 'The Question Bank category from which cards are drawn. All questions in this category (excluding sub-categories) become flashcards. Create categories via the course Question Bank.';
+$string['questioncategory']          = 'Question categories';
+$string['questioncategory_help']     = 'Select one or more Question Bank categories from which cards are drawn. All questions in the selected categories (excluding sub-categories) become flashcards. Create categories via the course Question Bank.';
 $string['sessionsize']               = 'Questions per session';
 $string['sessionsize_help']          = 'Maximum number of questions shown in one study session. Students can always finish early. Recommended: 5–20 for short, focused practice.';
 $string['boxcount']                  = 'Number of boxes';
@@ -91,6 +91,20 @@ $string['boxdistribution']    = 'Leitner box distribution';
 $string['activesessioninfo']  = 'Active session: {$a->answered} of {$a->total} answered, {$a->correct} correct';
 $string['resetandrestart']    = 'Reset and start over';
 $string['current']            = 'current';
+
+// Progress dashboard — session history.
+$string['sessionhistory']     = 'Session history';
+$string['sessiondate']        = 'Date';
+$string['sessioncorrectof']   = '{$a->correct} / {$a->total}';
+$string['sessionpercent']     = '{$a}%';
+$string['sessionduration']    = 'Duration';
+$string['nosessions']         = 'No completed sessions yet.';
+$string['totalsessions']      = '{$a} sessions completed';
+$string['avgcorrect']         = 'Average: {$a}% correct';
+$string['trend_improving']    = 'Improving';
+$string['trend_stable']       = 'Stable';
+$string['trend_declining']    = 'Needs practice';
+$string['correctrate']        = 'Correct';
 
 // Attempt page.
 // Note: 'question' string comes from Moodle core — use get_string('question').
