@@ -198,6 +198,9 @@ echo $OUTPUT->header();
 // ---- Back to overview button ----
 echo $OUTPUT->single_button($viewurl, get_string('backtooverview', 'mod_leitnerflow'), 'get');
 
+// ---- Centered question container (like Moodle Quiz) ----
+echo html_writer::start_div('leitnerflow-attempt-container');
+
 // ---- Box-flow pills (centered, no "Learned" box) ----
 $boxcount = (int) $leitnerflow->boxcount;
 echo html_writer::start_div('text-center my-3');
@@ -244,15 +247,17 @@ $cancelurl = new moodle_url('/mod/leitnerflow/view.php', [
     'sesskey' => sesskey(),
 ]);
 echo html_writer::start_div('d-flex justify-content-between align-items-center mt-3 mb-3');
-echo $OUTPUT->single_button($cancelurl, get_string('cancelsession', 'mod_leitnerflow'), 'get');
+echo $OUTPUT->single_button($cancelurl, get_string('endsession', 'mod_leitnerflow'), 'get');
 echo html_writer::span(
     get_string('question') . ' ' . ($currentindex + 1) . ' / ' . $totalquestions
     . ' &middot; '
     . html_writer::tag('b', $session->questionscorrect) . ' / ' . $session->questionsasked
     . ' ' . get_string('correct', 'mod_leitnerflow'),
-    'text-muted small'
+    'text-muted'
 );
 echo html_writer::end_div();
+
+echo html_writer::end_div(); // leitnerflow-attempt-container
 
 echo $OUTPUT->footer();
 

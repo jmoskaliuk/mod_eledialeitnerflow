@@ -128,6 +128,12 @@
 .lf-seg-box5 { background-color: var(--lf-dark-blue) !important; }
 .lf-seg-learned { background-color: var(--lf-green) !important; }
 
+/* ---- Attempt page: centered question container ---- */
+.leitnerflow-attempt-container {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
 /* Hide plugin's duplicate check button — Moodle's behaviour button is used */
 .leitnerflow-question-form > .d-grid {
     display: none !important;
