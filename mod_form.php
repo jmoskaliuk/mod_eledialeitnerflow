@@ -29,7 +29,7 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
 class mod_leitnerflow_mod_form extends moodleform_mod {
 
     public function definition(): void {
-        global $DB, $COURSE;
+        global $CFG, $DB, $COURSE;
 
         $mform = $this->_form;
 
