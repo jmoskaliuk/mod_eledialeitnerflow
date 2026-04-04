@@ -1,4 +1,8 @@
-/* mod_leitnerflow styles — eLeDia brand colors, WCAG AA accessible. */
+/* mod_leitnerflow styles — eLeDia brand colors, WCAG AA accessible.
+ *
+ * Only custom CSS for Leitner-specific visuals.
+ * Standard elements use Moodle Component Library (Bootstrap).
+ */
 
 /* ---- eLeDia Brand Color Variables ---- */
 :root {
@@ -8,11 +12,6 @@
     --lf-dark-orange: #b35000;
     --lf-pale-orange: #ffecdb;
     --lf-middle-orange: #fcbc82;
-    --lf-black: #353535;
-    --lf-white: #ffffff;
-    --lf-pale-gray: #f3f5f8;
-    --lf-light-gray: #e9e9e9;
-    --lf-super-light-blue: #a9cbd5;
     --lf-very-dark-blue: #0f2b3d;
     --lf-aqua: #3aadaa;
     --lf-dark-aqua: #267372;
@@ -20,35 +19,15 @@
     --lf-green: #669933;
     --lf-dark-green: #334d1a;
     --lf-pale-green: #d1e0c1;
-    --lf-dark-gray: #707070;
+    --lf-light-gray: #e9e9e9;
 }
 
-/* ---- Dashboard card ---- */
-.leitnerflow-dashboard {
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(25, 72, 102, 0.1);
-    overflow: hidden;
-}
-
-.leitnerflow-dashboard .card-body {
-    padding: 1.5rem;
-}
-
-.leitnerflow-dashboard .card-title {
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 1.25rem;
-    color: var(--lf-dark-blue);
-}
-
-/* ---- Leitner boxes visual (View Page) ---- */
+/* ---- Leitner box visualization (custom — no Moodle equivalent) ---- */
 .leitnerflow-boxes {
     display: flex;
     gap: 0;
     align-items: stretch;
     margin-bottom: 0.5rem;
-    position: relative;
     padding: 0 0.25rem;
 }
 
@@ -57,7 +36,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
     min-width: 0;
 }
 
@@ -68,7 +46,6 @@
     border-radius: 10px;
     position: relative;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    cursor: default;
 }
 
 .leitnerflow-box-visual:hover {
@@ -82,11 +59,6 @@
     line-height: 1;
 }
 
-.leitnerflow-box-icon {
-    font-size: 1rem;
-    margin-bottom: 0.15rem;
-}
-
 .leitnerflow-box-label {
     font-size: 0.7rem;
     font-weight: 600;
@@ -95,7 +67,7 @@
     letter-spacing: 0.3px;
 }
 
-/* Box color themes — eLeDia warm→cool, all text very-dark-blue for contrast */
+/* Box color themes — eLeDia warm→cool, text always very-dark-blue */
 .leitnerflow-box-1 .leitnerflow-box-visual {
     background: var(--lf-pale-orange);
     color: var(--lf-very-dark-blue);
@@ -126,14 +98,18 @@
     border-top: 3px solid var(--lf-dark-blue);
 }
 
-/* Learned box */
 .leitnerflow-box-learned .leitnerflow-box-visual {
     background: var(--lf-pale-green);
     color: var(--lf-dark-green);
     border-top: 3px solid var(--lf-green);
 }
 
-/* Arrow connectors between boxes */
+.leitnerflow-box-highlight .leitnerflow-box-visual {
+    transform: scale(1.08);
+    box-shadow: 0 4px 16px rgba(102, 153, 51, 0.3);
+}
+
+/* Arrow connectors */
 .leitnerflow-box-arrow {
     display: flex;
     align-items: center;
@@ -144,264 +120,27 @@
     align-self: center;
 }
 
-/* ---- Multi-segment progress bar (thick, under boxes) ---- */
-.leitnerflow-progressbar {
-    height: 12px;
-    border-radius: 6px;
-    overflow: hidden;
-    background: var(--lf-light-gray);
-    margin-bottom: 0.25rem;
-    display: flex;
-}
+/* ---- Per-box progress bar segment colors ---- */
+.lf-seg-box1 { background-color: var(--lf-orange) !important; }
+.lf-seg-box2 { background-color: var(--lf-middle-orange) !important; }
+.lf-seg-box3 { background-color: var(--lf-aqua) !important; }
+.lf-seg-box4 { background-color: var(--lf-light-blue) !important; }
+.lf-seg-box5 { background-color: var(--lf-dark-blue) !important; }
+.lf-seg-learned { background-color: var(--lf-green) !important; }
 
-.leitnerflow-progressbar .segment {
-    height: 100%;
-    transition: width 0.6s ease;
-}
-
-.leitnerflow-progressbar .seg-box1 {
-    background: var(--lf-orange);
-}
-
-.leitnerflow-progressbar .seg-box2 {
-    background: var(--lf-middle-orange);
-}
-
-.leitnerflow-progressbar .seg-box3 {
-    background: var(--lf-aqua);
-}
-
-.leitnerflow-progressbar .seg-box4 {
-    background: var(--lf-light-blue);
-}
-
-.leitnerflow-progressbar .seg-box5 {
-    background: var(--lf-dark-blue);
-}
-
-.leitnerflow-progressbar .seg-learned {
-    background: var(--lf-green);
-}
-
-/* Legacy 3-segment bar (learned/open/errors) */
-.leitnerflow-progressbar .segment-learned {
-    background: var(--lf-green);
-}
-
-.leitnerflow-progressbar .segment-open {
-    background: var(--lf-orange);
-}
-
-.leitnerflow-progressbar .segment-errors {
-    background: var(--lf-dark-orange);
-}
-
-.leitnerflow-progress-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.75rem;
-    color: var(--lf-dark-gray);
-    margin-top: 0.25rem;
-    margin-bottom: 1rem;
-}
-
-/* ---- Session banner ---- */
-.leitnerflow-session-banner {
-    background: rgba(169, 203, 213, 0.25);
-    border: 1px solid var(--lf-super-light-blue);
-    border-radius: 8px;
-    padding: 0.65rem 1rem;
-    margin-bottom: 1rem;
-    font-size: 0.85rem;
-    color: var(--lf-dark-blue);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.leitnerflow-session-banner .pulse-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--lf-dark-blue);
-    animation: lf-pulse 1.5s infinite;
-    flex-shrink: 0;
-}
-
-@keyframes lf-pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-}
-
-/* ---- Session action buttons ---- */
-.leitnerflow-actions {
-    margin-top: 0.5rem;
-}
-
-.leitnerflow-session-buttons {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-}
-
-.leitnerflow-session-buttons .btn {
-    flex: 1;
-    min-width: 140px;
-    min-height: 48px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.leitnerflow-session-buttons .btn:focus-visible {
-    outline: 3px solid var(--lf-orange);
-    outline-offset: 2px;
-}
-
-.leitnerflow-btn-start {
-    background: var(--lf-dark-blue) !important;
-    color: var(--lf-white) !important;
-    border: none !important;
-}
-
-.leitnerflow-btn-start:hover {
-    background: var(--lf-very-dark-blue) !important;
-}
-
-.leitnerflow-btn-new {
-    background: var(--lf-white) !important;
-    color: var(--lf-dark-blue) !important;
-    border: 2px solid var(--lf-dark-blue) !important;
-}
-
-.leitnerflow-btn-new:hover {
-    background: rgba(169, 203, 213, 0.2) !important;
-}
-
-.leitnerflow-btn-cancel {
-    background: var(--lf-white) !important;
-    color: var(--lf-dark-orange) !important;
-    border: 2px solid var(--lf-dark-orange) !important;
-}
-
-.leitnerflow-btn-cancel:hover {
-    background: var(--lf-pale-orange) !important;
-}
-
-/* ---- Celebration (all learned) ---- */
-.leitnerflow-alllearned {
-    text-align: center;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, var(--lf-pale-green), var(--lf-pale-aqua));
-    border-radius: 12px;
-    margin-bottom: 1rem;
-}
-
-.leitnerflow-alllearned .celebration-icon {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.leitnerflow-alllearned .celebration-text {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--lf-dark-green);
-}
-
-/* ---- Attempt page ---- */
-.leitnerflow-attempt-header {
-    margin-bottom: 1rem;
-}
-
-/* Box-flow pills on attempt page */
+/* ---- Attempt page: box-flow pill bar ---- */
 .leitnerflow-box-flow {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
     padding: 0.75rem 1rem;
-    background: var(--lf-pale-gray);
+    background: #f3f5f8;
     border-radius: 8px;
-    margin-bottom: 1rem;
-}
-
-.leitnerflow-box-pill {
-    padding: 0.35rem 1rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    border: 2px solid var(--lf-light-gray);
-    color: var(--lf-dark-gray);
-    background: var(--lf-white);
-    transition: all 0.3s;
-    min-height: 36px;
-    display: flex;
-    align-items: center;
-}
-
-.leitnerflow-box-pill.active {
-    border-color: var(--lf-dark-blue);
-    color: var(--lf-dark-blue);
-    background: rgba(169, 203, 213, 0.25);
-    transform: scale(1.05);
-}
-
-.leitnerflow-box-pill.learned {
-    border-color: var(--lf-dark-green);
-    color: var(--lf-white);
-    background: var(--lf-dark-green);
-}
-
-.leitnerflow-box-flow .box-arrow {
-    color: var(--lf-light-gray);
-    font-size: 0.9rem;
-}
-
-/* Score display */
-.leitnerflow-score {
-    font-size: 0.85rem;
-    color: var(--lf-black);
-}
-
-.leitnerflow-score b {
-    color: var(--lf-dark-green);
-}
-
-/* Session cancel link */
-.leitnerflow-cancel-link {
-    color: var(--lf-dark-gray) !important;
-    font-size: 0.85rem;
-    text-decoration: underline;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-}
-
-.leitnerflow-cancel-link:hover {
-    color: var(--lf-dark-orange) !important;
-}
-
-.leitnerflow-cancel-link:focus-visible {
-    outline: 3px solid var(--lf-orange);
-    outline-offset: 2px;
+    flex-wrap: wrap;
 }
 
 /* Hide plugin's duplicate check button — Moodle's behaviour button is used */
 .leitnerflow-question-form > .d-grid {
     display: none !important;
-}
-
-/* Box badge on attempt page */
-.leitnerflow-box-badge {
-    background: var(--lf-dark-blue);
-    color: var(--lf-white);
-    padding: 0.2rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-/* ---- Teacher report button ---- */
-.leitnerflow-teacher-actions {
-    margin-top: 1rem;
 }

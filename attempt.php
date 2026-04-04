@@ -17,8 +17,8 @@
 /**
  * Question attempt page for mod_leitnerflow.
  *
- * Renders one question at a time using Moodle's question_engine.
- * Uses Moodle's built-in immediatefeedback Check button (no duplicate).
+ * Uses Moodle's immediatefeedback Check button (no plugin duplicate).
+ * UI uses Moodle Component Library (Bootstrap) where possible.
  *
  * @package    mod_leitnerflow
  * @copyright  2024 eLeDia GmbH
@@ -189,65 +189,69 @@ $correctcount = $cardstate ? (int)$cardstate->correctcount : 0;
 
 echo $OUTPUT->header();
 
-// ---- Top bar: question counter, box badge, score ----
+// ---- Top bar: question counter, box badge (Moodle badge), score ----
 $progresspct = round(($currentindex / $totalquestions) * 100);
 
-echo html_writer::start_div('leitnerflow-attempt-header mb-3');
+echo html_writer::start_div('mb-3');
 
 echo html_writer::start_div('d-flex justify-content-between align-items-center mb-2');
 echo html_writer::span(
     get_string('question') . ' ' . ($currentindex + 1) . ' / ' . $totalquestions,
     'text-muted small'
 );
+// Moodle badge component.
 $boxlabel = ($cardstate && (int)$cardstate->status === leitner_engine::STATUS_LEARNED)
     ? get_string('learned', 'mod_leitnerflow')
     : get_string('cardstatus_box', 'mod_leitnerflow', $currentbox);
-echo html_writer::span($boxlabel, 'leitnerflow-box-badge');
+echo html_writer::span($boxlabel, 'badge bg-secondary');
 echo html_writer::span(
     html_writer::tag('b', $session->questionscorrect) . ' / ' . $session->questionsasked
     . ' ' . get_string('correct', 'mod_leitnerflow'),
-    'leitnerflow-score'
+    'small text-muted'
 );
 echo html_writer::end_div();
 
-// Progress bar.
+// Moodle progress component.
 echo html_writer::start_div('progress mb-2', ['style' => 'height: 4px;']);
-echo html_writer::div('', 'progress-bar',
-    ['style' => "width:{$progresspct}%; background: linear-gradient(90deg, #194866, #65a1b3);",
+echo html_writer::div('', 'progress-bar bg-primary',
+    ['style' => "width:{$progresspct}%",
      'role' => 'progressbar',
      'aria-valuenow' => $progresspct, 'aria-valuemin' => 0, 'aria-valuemax' => 100,
      'aria-label' => get_string('progress') . ': ' . $progresspct . '%']);
 echo html_writer::end_div();
 
-// ---- Box-flow pills ----
+// ---- Box-flow pills (custom — Leitner-specific) ----
 $boxcount = (int) $leitnerflow->boxcount;
 echo html_writer::start_div('leitnerflow-box-flow', [
     'role' => 'navigation',
     'aria-label' => get_string('boxdistribution', 'mod_leitnerflow'),
 ]);
 for ($b = 1; $b <= $boxcount; $b++) {
-    $pillclass = 'leitnerflow-box-pill';
+    $pillclass = 'badge rounded-pill ';
     if ($b === $currentbox) {
-        $pillclass .= ' active';
+        $pillclass .= 'bg-primary';
+    } else {
+        $pillclass .= 'bg-light text-dark border';
     }
     echo html_writer::span(
         get_string('box_n', 'mod_leitnerflow', $b),
         $pillclass,
-        ['aria-label' => get_string('box_n', 'mod_leitnerflow', $b) . ($b === $currentbox ? ' (' . get_string('current', 'mod_leitnerflow') . ')' : '')]
+        ['aria-label' => get_string('box_n', 'mod_leitnerflow', $b)
+            . ($b === $currentbox ? ' (' . get_string('current', 'mod_leitnerflow') . ')' : '')]
     );
     if ($b < $boxcount) {
-        echo html_writer::span('&#10140;', 'box-arrow', ['aria-hidden' => 'true']);
+        echo html_writer::span(' &#10140; ', 'text-muted small', ['aria-hidden' => 'true']);
     }
 }
-echo html_writer::span('&#10140;', 'box-arrow', ['aria-hidden' => 'true']);
+echo html_writer::span(' &#10140; ', 'text-muted small', ['aria-hidden' => 'true']);
 echo html_writer::span(
     '&#10003; ' . get_string('learned', 'mod_leitnerflow'),
-    'leitnerflow-box-pill learned',
+    'badge rounded-pill bg-success',
     ['aria-label' => get_string('learned', 'mod_leitnerflow')]
 );
 echo html_writer::end_div();
 
-echo html_writer::end_div(); // attempt-header
+echo html_writer::end_div(); // header
 
 // ---- Question form ----
 $actionurl = new moodle_url('/mod/leitnerflow/attempt.php', ['id' => $cmid, 'sessid' => $sessid]);
@@ -262,7 +266,7 @@ echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', '
 echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'attempt', 'value' => 1]);
 
 // Render the question (Moodle's behaviour provides the Check button).
-echo html_writer::start_div('leitnerflow-question-container card mb-3');
+echo html_writer::start_div('card mb-3');
 echo html_writer::start_div('card-body');
 echo $quba->render_question($slot, $displayoptions, ($currentindex + 1) . '');
 echo html_writer::end_div();
@@ -279,7 +283,7 @@ $cancelurl = new moodle_url('/mod/leitnerflow/view.php', [
 ]);
 echo html_writer::link($cancelurl,
     get_string('cancelsession', 'mod_leitnerflow'),
-    ['class' => 'leitnerflow-cancel-link']);
+    ['class' => 'btn btn-link btn-sm text-muted']);
 echo html_writer::span(
     get_string('nextaftercheck', 'mod_leitnerflow'),
     'text-muted small'

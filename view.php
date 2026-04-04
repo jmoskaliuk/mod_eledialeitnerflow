@@ -17,6 +17,9 @@
 /**
  * Main view page for mod_leitnerflow activity.
  *
+ * Uses Moodle Component Library (Bootstrap) for standard elements,
+ * custom CSS only for Leitner box visualization.
+ *
  * @package    mod_leitnerflow
  * @copyright  2024 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -102,12 +105,12 @@ if ($canattempt) {
         'status'        => 0,
     ]);
 
-    // ---- Dashboard card ----
-    echo html_writer::start_div('leitnerflow-dashboard card mb-4');
+    // ---- Dashboard card (Moodle card component) ----
+    echo html_writer::start_div('card mb-4');
     echo html_writer::start_div('card-body');
     echo html_writer::tag('h5', get_string('yourprogress', 'mod_leitnerflow'), ['class' => 'card-title']);
 
-    // ---- Leitner box visualization ----
+    // ---- Leitner box visualization (custom — no Moodle equivalent) ----
     $boxdist = leitner_engine::get_box_distribution(
         $leitnerflow->id, $USER->id, $leitnerflow->questioncategoryid, $leitnerflow->boxcount
     );
@@ -132,7 +135,6 @@ if ($canattempt) {
         echo html_writer::end_div();
         echo html_writer::end_div();
 
-        // Arrow between boxes.
         if ($b < $boxcount) {
             echo html_writer::tag('div', '&#10140;', [
                 'class' => 'leitnerflow-box-arrow',
@@ -149,15 +151,15 @@ if ($canattempt) {
 
     // Learned box.
     $learnedlabel = get_string('learned', 'mod_leitnerflow');
-    echo html_writer::start_div('leitnerflow-box leitnerflow-box-learned', [
+    $learnedclass = 'leitnerflow-box leitnerflow-box-learned';
+    if ($stats->total > 0 && $stats->learned >= $stats->total) {
+        $learnedclass .= ' leitnerflow-box-highlight';
+    }
+    echo html_writer::start_div($learnedclass, [
         'role' => 'status',
         'aria-label' => $learnedlabel . ': ' . $stats->learned,
     ]);
-    $learnedattr = [];
-    if ($stats->total > 0 && $stats->learned >= $stats->total) {
-        $learnedattr = ['style' => 'transform: scale(1.08); box-shadow: 0 4px 16px rgba(102,153,51,0.3);'];
-    }
-    echo html_writer::start_div('leitnerflow-box-visual', $learnedattr);
+    echo html_writer::start_div('leitnerflow-box-visual');
     echo html_writer::tag('div', $stats->learned, ['class' => 'leitnerflow-box-count']);
     echo html_writer::tag('div', $learnedlabel . ' &#10003;', ['class' => 'leitnerflow-box-label']);
     echo html_writer::end_div();
@@ -165,34 +167,31 @@ if ($canattempt) {
 
     echo html_writer::end_div(); // leitnerflow-boxes
 
-    // ---- Per-box progress bar ----
+    // ---- Per-box progress bar (Moodle progress component) ----
     if ($stats->total > 0) {
         $pctlearned = round($stats->learned / $stats->total * 100, 1);
 
-        echo html_writer::start_div('leitnerflow-progressbar', [
-            'role' => 'progressbar',
-            'aria-valuenow' => round($pctlearned),
-            'aria-valuemin' => '0',
-            'aria-valuemax' => '100',
-            'aria-label' => round($pctlearned) . '% ' . get_string('learned', 'mod_leitnerflow'),
-        ]);
-
+        echo html_writer::start_div('progress mb-1 mt-3', ['style' => 'height: 12px;']);
         for ($b = 1; $b <= $boxcount; $b++) {
             $cnt = $boxdist[$b] ?? 0;
             if ($cnt > 0) {
                 $pct = round($cnt / $stats->total * 100, 1);
-                echo html_writer::div('', "segment seg-box{$b}", ['style' => "width:{$pct}%"]);
+                echo html_writer::div('', "progress-bar lf-seg-box{$b}",
+                    ['style' => "width:{$pct}%", 'role' => 'progressbar',
+                     'aria-valuenow' => $pct, 'aria-valuemin' => 0, 'aria-valuemax' => 100]);
             }
         }
         if ($stats->learned > 0) {
             $pct = round($stats->learned / $stats->total * 100, 1);
-            echo html_writer::div('', 'segment seg-learned', ['style' => "width:{$pct}%"]);
+            echo html_writer::div('', 'progress-bar lf-seg-learned',
+                ['style' => "width:{$pct}%", 'role' => 'progressbar',
+                 'aria-valuenow' => $pct, 'aria-valuemin' => 0, 'aria-valuemax' => 100]);
         }
         echo html_writer::end_div();
 
         // Labels below progress bar.
         $opencount = $stats->total - $stats->learned;
-        echo html_writer::start_div('leitnerflow-progress-label');
+        echo html_writer::start_div('d-flex justify-content-between small text-muted mt-1 mb-3');
         echo html_writer::span($opencount . ' ' . get_string('open', 'mod_leitnerflow'));
         echo html_writer::span(
             $stats->learned . ' / ' . $stats->total . ' '
@@ -206,38 +205,36 @@ if ($canattempt) {
     echo html_writer::end_div(); // card
 
     // ---- Session action area ----
-    echo html_writer::start_div('leitnerflow-actions');
+    echo html_writer::start_div('mt-3');
 
     if ($stats->total === 0) {
-        // No questions configured.
         echo $OUTPUT->notification(get_string('nocardsinpool', 'mod_leitnerflow'), 'warning');
 
     } else if ($stats->learned >= $stats->total) {
-        // All learned — celebration.
-        echo html_writer::start_div('leitnerflow-alllearned', ['role' => 'status']);
-        echo html_writer::tag('div', '&#127881;', ['class' => 'celebration-icon', 'aria-hidden' => 'true']);
-        echo html_writer::tag('div', get_string('alllearned', 'mod_leitnerflow'), ['class' => 'celebration-text']);
+        // All learned — Moodle alert + celebration.
+        echo html_writer::start_div('alert alert-success d-flex align-items-center', ['role' => 'status']);
+        echo html_writer::span('&#127881;', 'mr-2 me-2', ['aria-hidden' => 'true', 'style' => 'font-size: 1.5rem;']);
+        echo html_writer::tag('strong', get_string('alllearned', 'mod_leitnerflow'));
         echo html_writer::end_div();
 
-        echo html_writer::start_div('leitnerflow-session-buttons');
+        echo html_writer::start_div('d-flex gap-2 flex-wrap');
         $reseturl = new moodle_url('/mod/leitnerflow/view.php', [
             'id' => $cm->id,
             'resetuserid' => $USER->id,
             'sesskey' => sesskey(),
         ]);
         echo html_writer::link($reseturl,
-            '&#10227; ' . get_string('resetandrestart', 'mod_leitnerflow'),
-            ['class' => 'btn leitnerflow-btn-new']);
+            get_string('resetandrestart', 'mod_leitnerflow'),
+            ['class' => 'btn btn-outline-secondary']);
         echo html_writer::end_div();
 
     } else if ($activesession) {
-        // Active session — show session banner + 3 buttons.
+        // Active session — Moodle alert as session banner.
         $answered = (int) $activesession->questionsasked;
         $totalq   = count(json_decode($activesession->questionids, true));
         $correctq = (int) $activesession->questionscorrect;
 
-        echo html_writer::start_div('leitnerflow-session-banner', ['role' => 'status']);
-        echo html_writer::span('', 'pulse-dot', ['aria-hidden' => 'true']);
+        echo html_writer::start_div('alert alert-info', ['role' => 'status']);
         echo get_string('activesessioninfo', 'mod_leitnerflow', (object) [
             'answered' => $answered,
             'total'    => $totalq,
@@ -245,7 +242,7 @@ if ($canattempt) {
         ]);
         echo html_writer::end_div();
 
-        echo html_writer::start_div('leitnerflow-session-buttons');
+        echo html_writer::start_div('d-flex gap-2 flex-wrap');
 
         // Continue session (primary).
         $continueurl = new moodle_url('/mod/leitnerflow/attempt.php', [
@@ -253,14 +250,14 @@ if ($canattempt) {
             'sessid' => $activesession->id,
         ]);
         echo html_writer::link($continueurl,
-            '&#9654; ' . get_string('continuesession', 'mod_leitnerflow'),
-            ['class' => 'btn leitnerflow-btn-start']);
+            get_string('continuesession', 'mod_leitnerflow'),
+            ['class' => 'btn btn-primary']);
 
         // New session.
         $newurl = new moodle_url('/mod/leitnerflow/attempt.php', ['id' => $cm->id, 'start' => 1]);
         echo html_writer::link($newurl,
-            '&#10227; ' . get_string('newsession', 'mod_leitnerflow'),
-            ['class' => 'btn leitnerflow-btn-new']);
+            get_string('newsession', 'mod_leitnerflow'),
+            ['class' => 'btn btn-outline-secondary']);
 
         // Cancel session.
         $cancelurl = new moodle_url('/mod/leitnerflow/view.php', [
@@ -269,33 +266,31 @@ if ($canattempt) {
             'sesskey' => sesskey(),
         ]);
         echo html_writer::link($cancelurl,
-            '&#10005; ' . get_string('cancel'),
-            ['class' => 'btn leitnerflow-btn-cancel']);
+            get_string('cancel'),
+            ['class' => 'btn btn-outline-danger']);
 
         echo html_writer::end_div();
 
     } else {
         // No active session — start button.
-        echo html_writer::start_div('leitnerflow-session-buttons');
+        echo html_writer::start_div('d-flex');
         $starturl = new moodle_url('/mod/leitnerflow/attempt.php', ['id' => $cm->id, 'start' => 1]);
         echo html_writer::link($starturl,
-            '&#9654; ' . get_string('startsession', 'mod_leitnerflow'),
-            ['class' => 'btn leitnerflow-btn-start']);
+            get_string('startsession', 'mod_leitnerflow'),
+            ['class' => 'btn btn-primary']);
         echo html_writer::end_div();
     }
 
-    echo html_writer::end_div(); // leitnerflow-actions
+    echo html_writer::end_div(); // actions
 }
 
 // ---- Teacher view ----------------------------------------------------------
 if ($isteacher) {
-    echo html_writer::start_div('leitnerflow-teacher-actions');
     $reporturl = new moodle_url('/mod/leitnerflow/report.php', ['id' => $cm->id]);
     echo html_writer::div(
         $OUTPUT->single_button($reporturl, get_string('viewreport', 'mod_leitnerflow'), 'get'),
-        'mt-2'
+        'mt-3'
     );
-    echo html_writer::end_div();
 }
 
 echo $OUTPUT->footer();
