@@ -63,10 +63,6 @@ class mod_leitnerflow_mod_form extends moodleform_mod {
             $debuginfo = 'ERROR: ' . $e->getMessage();
         }
 
-        // Always show debug info until this is resolved.
-        $mform->addElement('static', 'debug_categories', 'Debug',
-            \html_writer::tag('small', $debuginfo, ['class' => 'text-muted']));
-
         if (empty($categories)) {
             $mform->addElement('static', 'nocategory_warning', '',
                 \html_writer::tag('div',
