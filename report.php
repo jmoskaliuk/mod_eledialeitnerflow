@@ -126,7 +126,7 @@ usort($students, function($a, $b) use ($tsort, $tdir) {
             $cmp = ($a->lastsession ?? 0) <=> ($b->lastsession ?? 0);
             break;
         default: // fullname.
-            $cmp = core_text::strcmp(
+            $cmp = strcmp(
                 core_text::strtolower($a->fullname),
                 core_text::strtolower($b->fullname)
             );
