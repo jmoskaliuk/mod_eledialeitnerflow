@@ -140,10 +140,10 @@ if ($canattempt) {
             $boxattrs['style'] = 'cursor: pointer;';
             echo html_writer::start_tag('a', array_merge($boxattrs, [
                 'href' => $boxurl->out(false),
-                'class' => "eledialeitnerflow-box leitnerflow-box-{$b} text-decoration-none",
+                'class' => "eledialeitnerflow-box eledialeitnerflow-box-{$b} text-decoration-none",
             ]));
         } else {
-            echo html_writer::start_div("eledialeitnerflow-box leitnerflow-box-{$b}", array_merge($boxattrs, [
+            echo html_writer::start_div("eledialeitnerflow-box eledialeitnerflow-box-{$b}", array_merge($boxattrs, [
                 'role' => 'status',
             ]));
         }
@@ -173,7 +173,7 @@ if ($canattempt) {
 
     // Learned box.
     $learnedlabel = get_string('learned', 'mod_eledialeitnerflow');
-    $learnedclass = 'eledialeitnerflow-box leitnerflow-box-learned';
+    $learnedclass = 'eledialeitnerflow-box eledialeitnerflow-box-learned';
     if ($stats->total > 0 && $stats->learned >= $stats->total) {
         $learnedclass .= ' eledialeitnerflow-box-highlight';
     }
