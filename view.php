@@ -258,15 +258,22 @@ if ($canattempt) {
             }
             $recentpct = ($recenttotal > 0) ? round(($recentcorrect / $recenttotal) * 100) : 0;
 
-            if ($recentpct > $sessionstats->avgpercent + 5) {
-                $trendicon = '&#x1F4C8;'; // 📈
-            } else if ($recentpct < $sessionstats->avgpercent - 5) {
-                $trendicon = '&#x1F4C9;'; // 📉
+            $diff = $recentpct - $sessionstats->avgpercent;
+            if ($diff > 5) {
+                $badgeclass = 'badge bg-success';
+                $arrow      = '&#8599;'; // ↗
+                $diffstr    = '+' . $diff . '%';
+            } else if ($diff < -5) {
+                $badgeclass = 'badge bg-danger';
+                $arrow      = '&#8600;'; // ↘
+                $diffstr    = $diff . '%';
             } else {
-                $trendicon = '&#x2705;'; // ✅
+                $badgeclass = 'badge bg-secondary';
+                $arrow      = '&#8594;'; // →
+                $diffstr    = '±' . abs($diff) . '%';
             }
             echo html_writer::div(
-                html_writer::span($trendicon)
+                html_writer::span($arrow . ' ' . $diffstr, $badgeclass)
                 . ' '
                 . html_writer::span(
                     get_string('trend_recent', 'mod_leitnerflow', (object) [
@@ -285,7 +292,7 @@ if ($canattempt) {
         echo html_writer::start_tag('tr');
         echo html_writer::tag('th', get_string('sessiondate', 'mod_leitnerflow'), ['class' => 'small text-muted']);
         echo html_writer::tag('th', get_string('correctrate', 'mod_leitnerflow'), ['class' => 'small text-muted']);
-        echo html_writer::tag('th', '', ['class' => 'small text-muted', 'style' => 'width: 40%;']);
+        echo html_writer::tag('th', get_string('progress'), ['class' => 'small text-muted', 'style' => 'width: 40%;']);
         echo html_writer::tag('th', get_string('sessionduration', 'mod_leitnerflow'),
             ['class' => 'small text-muted text-end']);
         echo html_writer::end_tag('tr');
@@ -338,7 +345,7 @@ if ($canattempt) {
 
             // Mini progress bar.
             echo html_writer::start_tag('td');
-            echo html_writer::start_div('progress', ['style' => 'height: 6px;']);
+            echo html_writer::start_div('progress', ['style' => 'height: 12px;']);
             echo html_writer::div('', 'progress-bar ' . $barclass,
                 ['style' => "width:{$pct}%",
                  'role' => 'progressbar',
