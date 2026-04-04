@@ -86,5 +86,51 @@ function xmldb_leitnerflow_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2024120113, 'leitnerflow');
     }
 
+    // Enable core multilang filter and re-import tour with HTML multilang syntax.
+    if ($oldversion < 2024120114) {
+        // Ensure the core multilang filter is active.
+        require_once(__DIR__ . '/install.php');
+        _leitnerflow_ensure_multilang_filter();
+
+        // Delete old tours (they used {mlang} syntax which needs filter_multilang2).
+        try {
+            $oldtours = $DB->get_records_select('tool_usertours_tours',
+                $DB->sql_like('name', '?'), ['%LeitnerFlow%']);
+            foreach ($oldtours as $tour) {
+                $DB->delete_records('tool_usertours_steps', ['tourid' => $tour->id]);
+                $DB->delete_records('tool_usertours_tours', ['id' => $tour->id]);
+            }
+        } catch (\Throwable $e) {
+            debugging('LeitnerFlow: Could not clean old tours: ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
+
+        // Re-import with core multilang HTML syntax.
+        _leitnerflow_import_user_tour();
+
+        upgrade_mod_savepoint(true, 2024120114, 'leitnerflow');
+    }
+
+    // Fix tour targettype: 1=block (wrong), 0=CSS selector (correct).
+    if ($oldversion < 2024120115) {
+        require_once(__DIR__ . '/install.php');
+
+        // Delete all LeitnerFlow tours (they had wrong targettype values).
+        try {
+            $oldtours = $DB->get_records_select('tool_usertours_tours',
+                $DB->sql_like('name', '?'), ['%LeitnerFlow%']);
+            foreach ($oldtours as $tour) {
+                $DB->delete_records('tool_usertours_steps', ['tourid' => $tour->id]);
+                $DB->delete_records('tool_usertours_tours', ['id' => $tour->id]);
+            }
+        } catch (\Throwable $e) {
+            debugging('LeitnerFlow: Could not clean old tours: ' . $e->getMessage(), DEBUG_DEVELOPER);
+        }
+
+        // Re-import with corrected targettype=0 for CSS selectors.
+        _leitnerflow_import_user_tour();
+
+        upgrade_mod_savepoint(true, 2024120115, 'leitnerflow');
+    }
+
     return true;
 }

@@ -25,8 +25,27 @@
 defined('MOODLE_INTERNAL') || die();
 
 function xmldb_leitnerflow_install() {
+    // Ensure the core multi-language content filter is active (needed for tour translations).
+    _leitnerflow_ensure_multilang_filter();
     // Import the introductory user tour.
     _leitnerflow_import_user_tour();
+}
+
+/**
+ * Ensure the Moodle core multi-language content filter is enabled.
+ *
+ * The LeitnerFlow user tour uses <span class="multilang"> tags which require
+ * the core 'multilang' filter to be active site-wide.
+ */
+function _leitnerflow_ensure_multilang_filter(): void {
+    global $CFG;
+    require_once($CFG->libdir . '/filterlib.php');
+
+    // TEXTFILTER_ON = 1. Only enable if currently off or disabled.
+    $currentstate = filter_get_global_states();
+    if (!isset($currentstate['multilang']) || $currentstate['multilang']->active != TEXTFILTER_ON) {
+        filter_set_global_state('multilang', TEXTFILTER_ON);
+    }
 }
 
 /**
