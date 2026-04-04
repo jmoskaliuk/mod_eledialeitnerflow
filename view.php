@@ -87,12 +87,8 @@ $isteacher  = has_capability('mod/leitnerflow:viewreport', $context);
 $canattempt = has_capability('mod/leitnerflow:attempt', $context);
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(format_string($leitnerflow->name));
-
-// Show intro.
-if ($leitnerflow->intro) {
-    echo $OUTPUT->box(format_module_intro('leitnerflow', $leitnerflow, $cm->id), 'generalbox');
-}
+// Note: Moodle 4.x+ renders the activity name and intro in the page header
+// automatically. Do NOT call format_module_intro() here to avoid duplication.
 
 // ---- Student view ----------------------------------------------------------
 if ($canattempt) {
