@@ -23,6 +23,7 @@
  *   - 'progress' (core)           — used as get_string('progress')
  *   - 'continue' (core)           — used as get_string('continue')
  *   - 'cancel' (core)             — used as get_string('cancel')
+ *   - 'date' (core)               — used as get_string('date')
  *   - 'participants' (core)       — used as get_string('participants')
  *   - 'questionbank' (core_question) — used as get_string('questionbank', 'question')
  *
@@ -94,7 +95,6 @@ $string['current']            = 'current';
 
 // Progress dashboard — session history.
 $string['sessionhistory']     = 'Session history';
-$string['sessiondate']        = 'Date';
 $string['sessioncorrectof']   = '{$a->correct} / {$a->total}';
 $string['sessionpercent']     = '{$a}%';
 $string['sessionduration']    = 'Duration';

@@ -369,7 +369,7 @@ if ($canattempt) {
         echo html_writer::start_tag('table', ['class' => 'table table-sm table-hover mb-0']);
         echo html_writer::start_tag('thead');
         echo html_writer::start_tag('tr');
-        echo html_writer::tag('th', get_string('sessiondate', 'mod_leitnerflow'), ['class' => 'small text-muted']);
+        echo html_writer::tag('th', get_string('date'), ['class' => 'small text-muted']);
         echo html_writer::tag('th', get_string('correctrate', 'mod_leitnerflow'), ['class' => 'small text-muted']);
         echo html_writer::tag('th', get_string('progress'), ['class' => 'small text-muted', 'style' => 'width: 40%;']);
         echo html_writer::tag('th', get_string('sessionduration', 'mod_leitnerflow'),

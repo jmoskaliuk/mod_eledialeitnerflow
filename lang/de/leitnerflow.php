@@ -76,7 +76,6 @@ $string['nounlearnedcards']        = 'Alle Karten sind bereits gelernt! Du kanns
 
 // Progress Dashboard — Session-Historie.
 $string['sessionhistory']     = 'Session-Verlauf';
-$string['sessiondate']        = 'Datum';
 $string['sessioncorrectof']   = '{$a->correct} / {$a->total}';
 $string['sessionpercent']     = '{$a}%';
 $string['sessionduration']    = 'Dauer';
@@ -98,15 +97,12 @@ $string['backtooverview']     = 'Zurück zur Übersicht';
 $string['practiceboxn']       = 'Box {$a} üben';
 $string['nocardsinthisbox']   = 'Keine Karten in Box {$a} vorhanden.';
 
-$string['question']                = 'Frage';
-$string['of']                      = 'von';
 $string['cardstatus_box']          = 'Box {$a}';
 $string['cardstatus_learned']      = 'Gelernt';
 $string['correct']                 = 'Richtig!';
 $string['incorrect']               = 'Falsch.';
 $string['nextquestion']            = 'Nächste Frage';
 $string['finishsession']           = 'Session beenden';
-$string['check']                   = 'Antwort prüfen';
 $string['correctanswer']           = 'Richtige Antwort';
 $string['movedtobox']              = 'Karte in Box {$a} verschoben';
 $string['cardlearned']             = 'Karte als gelernt markiert!';
@@ -117,9 +113,6 @@ $string['questionsinpool']         = 'Fragen im Pool';
 $string['avglearnedpercent']       = 'Ø % gelernt';
 $string['endsession']              = 'Session beenden';
 $string['report']                  = 'Schülerübersicht';
-$string['student']                 = 'Schüler/in';
-$string['progress']                = 'Fortschritt';
-$string['sessions']                = 'Sessions';
 $string['lastsession']             = 'Letzte Session';
 $string['nostudents']              = 'Noch kein Schüler hat diese Aktivität gestartet.';
 $string['resetprogress']           = 'Fortschritt zurücksetzen';
