@@ -101,15 +101,6 @@ class mod_leitnerflow_mod_form extends moodleform_mod {
         $mform->addRule('sessionsize', null, 'required');
         $mform->addRule('sessionsize', null, 'numeric');
 
-        $priorityoptions = [
-            0 => get_string('prioritystrategy_prio',  'mod_leitnerflow'),
-            1 => get_string('prioritystrategy_mixed', 'mod_leitnerflow'),
-        ];
-        $mform->addElement('select', 'prioritystrategy',
-            get_string('prioritystrategy', 'mod_leitnerflow'), $priorityoptions);
-        $mform->addHelpButton('prioritystrategy', 'prioritystrategy', 'mod_leitnerflow');
-        $mform->setDefault('prioritystrategy', 0);
-
         // ---- Leitner System settings ---------------------------------------
         $mform->addElement('header', 'leitnersettingsheader',
             get_string('leitnersettings', 'mod_leitnerflow'));
@@ -138,26 +129,23 @@ class mod_leitnerflow_mod_form extends moodleform_mod {
         $mform->addHelpButton('wrongbehavior', 'wrongbehavior', 'mod_leitnerflow');
         $mform->setDefault('wrongbehavior', 0);
 
-        // ---- Grading -------------------------------------------------------
-        $mform->addElement('header', 'gradingsettingsheader',
-            get_string('gradingsettings', 'mod_leitnerflow'));
-
-        $gradeoptions = [
-            0 => get_string('grademethod_none',    'mod_leitnerflow'),
-            1 => get_string('grademethod_percent', 'mod_leitnerflow'),
+        $priorityoptions = [
+            0 => get_string('prioritystrategy_prio',  'mod_leitnerflow'),
+            1 => get_string('prioritystrategy_mixed', 'mod_leitnerflow'),
         ];
-        $mform->addElement('select', 'grademethod',
-            get_string('grademethod', 'mod_leitnerflow'), $gradeoptions);
-        $mform->setDefault('grademethod', 0);
-
-        // ---- Display settings -------------------------------------------------
-        $mform->addElement('header', 'displaysettingsheader',
-            get_string('displaysettings', 'mod_leitnerflow'));
+        $mform->addElement('select', 'prioritystrategy',
+            get_string('cardselection', 'mod_leitnerflow'), $priorityoptions);
+        $mform->addHelpButton('prioritystrategy', 'prioritystrategy', 'mod_leitnerflow');
+        $mform->setDefault('prioritystrategy', 0);
 
         $mform->addElement('selectyesno', 'showanimation',
             get_string('showanimation', 'mod_leitnerflow'));
         $mform->addHelpButton('showanimation', 'showanimation', 'mod_leitnerflow');
         $mform->setDefault('showanimation', 1);
+
+        // ---- Grading -------------------------------------------------------
+        $mform->addElement('header', 'gradingsettingsheader',
+            get_string('gradingsettings', 'mod_leitnerflow'));
 
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();

@@ -35,10 +35,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 // Plugin metadata.
-$string['pluginname']           = 'LeitnerFlow Activity';
-$string['modulename']           = 'LeitnerFlow Activity';
-$string['modulenameplural']     = 'LeitnerFlow Activities';
-$string['modulename_help']      = 'The Leitner Flow uses spaced repetition (Leitner system) to help students efficiently memorise question content from the Question Bank. Cards move through boxes based on correct answers and are repeated until fully learned.';
+$string['pluginname']           = 'LeitnerFlow';
+$string['modulename']           = 'LeitnerFlow';
+$string['modulenameplural']     = 'LeitnerFlow';
+$string['modulename_help']      = 'LeitnerFlow uses the proven spaced repetition method by Sebastian Leitner to help students learn efficiently. Questions from the Question Bank become virtual flashcards that move through a series of boxes. Correct answers advance a card to the next box; wrong answers send it back. Cards in lower boxes appear more frequently, so students focus on what they find hardest. Once a card has been answered correctly enough times, it graduates to "Learned". Students work in short, focused sessions and can track their progress over time through a visual dashboard with box distribution, progress bar, and session history.';
 $string['pluginadministration'] = 'LeitnerFlow administration';
 
 // Settings form — short labels, details in _help tooltips.
@@ -59,6 +59,7 @@ $string['questionrotation']          = 'Question rotation';
 $string['questionrotation_help']     = '<b>Dynamic</b>: questions are always fetched fresh from the Question Bank — new questions appear automatically, deleted ones disappear.<br><b>Fixed</b>: the question pool is locked when the student first starts. Later changes to the bank are not reflected.';
 $string['questionrotation_dynamic']  = 'Dynamic';
 $string['questionrotation_fixed']    = 'Fixed pool';
+$string['cardselection']             = 'Card selection';
 $string['prioritystrategy']          = 'Card selection';
 $string['prioritystrategy_help']     = '<b>Prioritise lower boxes</b>: questions in Box 1 (least known) are shown first — good for focused review.<br><b>Mixed random</b>: questions from all boxes are mixed randomly — good for variety.';
 $string['prioritystrategy_prio']     = 'Lower boxes first';

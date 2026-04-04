@@ -24,10 +24,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname']         = 'LeitnerFlow Activity';
-$string['modulename']         = 'LeitnerFlow Activity';
-$string['modulenameplural']   = 'LeitnerFlow Activities';
-$string['modulename_help']    = 'Das Leitner-Quiz nutzt das Karteikartensystem nach Sebastian Leitner (Spaced Repetition), um Schüler beim effizienten Lernen zu unterstützen. Karten wandern je nach Antwort durch Boxen und werden so lange wiederholt, bis sie sicher beherrscht werden.';
+$string['pluginname']         = 'LeitnerFlow';
+$string['modulename']         = 'LeitnerFlow';
+$string['modulenameplural']   = 'LeitnerFlow';
+$string['modulename_help']    = 'LeitnerFlow nutzt die bewährte Lernmethode nach Sebastian Leitner (Spaced Repetition), um Lernenden beim effizienten Lernen zu helfen. Fragen aus der Fragensammlung werden zu virtuellen Karteikarten, die durch mehrere Boxen wandern. Richtige Antworten befördern eine Karte in die nächste Box, falsche Antworten schicken sie zurück. Karten in niedrigeren Boxen erscheinen häufiger — so konzentrieren sich Lernende auf die schwierigsten Inhalte. Wurde eine Karte oft genug richtig beantwortet, gilt sie als „Gelernt". Die Lernenden arbeiten in kurzen, fokussierten Sessions und können ihren Fortschritt über ein visuelles Dashboard mit Box-Verteilung, Fortschrittsbalken und Session-Historie verfolgen.';
 $string['pluginadministration'] = 'LeitnerFlow-Verwaltung';
 
 $string['questioncategory']        = 'Fragenkategorien';
@@ -47,7 +47,8 @@ $string['questionrotation']        = 'Fragenrotation';
 $string['questionrotation_help']   = 'Dynamisch: Fragen werden immer frisch aus der Fragensammlung geholt. Fest: Der Pool wird beim ersten Start gesperrt.';
 $string['questionrotation_dynamic'] = 'Dynamisch (immer aus der Bank)';
 $string['questionrotation_fixed']   = 'Fester Pool (beim ersten Start gesperrt)';
-$string['prioritystrategy']        = 'Kartenauswahlstrategie';
+$string['prioritystrategy']        = 'Kartenauswahl';
+$string['cardselection']           = 'Kartenauswahl';
 $string['prioritystrategy_help']   = 'Priorisiert: Fragen aus niederen Boxen werden zuerst gestellt. Gemischt: Zufällige Auswahl aus allen Boxen.';
 $string['prioritystrategy_prio']   = 'Niedere Boxen bevorzugen';
 $string['prioritystrategy_mixed']  = 'Gemischte Zufallsauswahl';
@@ -58,7 +59,7 @@ $string['gradingsettings']         = 'Bewertungseinstellungen';
 $string['displaysettings']         = 'Anzeige';
 $string['showanimation']           = 'Kartenanimation';
 $string['showanimation_help']      = 'Wenn aktiviert, wird nach jeder Frage eine kurze Animation gezeigt, die anzeigt, in welche Leitner-Box die Karte gewandert ist. Wenn deaktiviert, erscheint sofort die nächste Frage.';
-$string['leitnersettings']         = 'Leitner-System-Einstellungen';
+$string['leitnersettings']         = 'Leitner-System';
 $string['sessionsettings']         = 'Sitzungseinstellungen';
 
 $string['startsession']            = 'Lernsession starten';
