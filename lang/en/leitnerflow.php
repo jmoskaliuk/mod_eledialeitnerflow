@@ -29,6 +29,7 @@ $string['pluginname']         = 'LeitnerFlow Activity';
 $string['modulename']         = 'LeitnerFlow Activity';
 $string['modulenameplural']   = 'LeitnerFlow Activities';
 $string['modulename_help']    = 'The Leitner Flow uses spaced repetition (Leitner system) to help students efficiently memorise question content from the Question Bank. Cards move through boxes based on correct answers and are repeated until fully learned.';
+$string['pluginadministration'] = 'LeitnerFlow administration';
 
 // Settings form
 $string['questioncategory']        = 'Question category';

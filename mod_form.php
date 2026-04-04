@@ -45,23 +45,36 @@ class mod_leitnerflow_mod_form extends moodleform_mod {
         // ---- Question Bank -------------------------------------------------
         $mform->addElement('header', 'questionbanksettings', get_string('questioncategory', 'mod_leitnerflow'));
 
-        // Load all question categories for this course context
+        // Load all question categories accessible from this course.
+        // Include categories from the course context AND all parent contexts (system, course category).
         $coursecontext = \core\context\course::instance($COURSE->id);
-        $categories    = $DB->get_records_menu(
-            'question_categories',
-            ['contextid' => $coursecontext->id],
-            'name',
-            'id,name'
-        );
+        $contexts = new \core_question\local\bank\question_edit_contexts($coursecontext);
+        $allcontexts = $contexts->having_cap('moodle/question:useall');
+
+        $categories = [];
+        foreach ($allcontexts as $ctx) {
+            $cats = $DB->get_records('question_categories', ['contextid' => $ctx->id], 'sortorder, name');
+            foreach ($cats as $cat) {
+                $contextname = $ctx->get_context_name(false, true);
+                $categories[$cat->id] = $cat->name . ' (' . $contextname . ')';
+            }
+        }
 
         if (empty($categories)) {
-            $mform->addElement('static', 'nocategory_warning', '',
-                html_writer::tag('div',
-                    get_string('nocategory', 'mod_leitnerflow'),
-                    ['class' => 'alert alert-warning']
-                )
-            );
-            $categories = [0 => get_string('nocategory', 'mod_leitnerflow')];
+            // Fallback: try to load from course context directly.
+            $cats = $DB->get_records_menu('question_categories',
+                ['contextid' => $coursecontext->id], 'name', 'id,name');
+            if (!empty($cats)) {
+                $categories = $cats;
+            } else {
+                $mform->addElement('static', 'nocategory_warning', '',
+                    html_writer::tag('div',
+                        get_string('nocategory', 'mod_leitnerflow'),
+                        ['class' => 'alert alert-warning']
+                    )
+                );
+                $categories = [0 => '---'];
+            }
         }
 
         $mform->addElement('select', 'questioncategoryid',

@@ -28,6 +28,7 @@ $string['pluginname']         = 'LeitnerFlow Activity';
 $string['modulename']         = 'LeitnerFlow Activity';
 $string['modulenameplural']   = 'LeitnerFlow Activities';
 $string['modulename_help']    = 'Das Leitner-Quiz nutzt das Karteikartensystem nach Sebastian Leitner (Spaced Repetition), um Schüler beim effizienten Lernen zu unterstützen. Karten wandern je nach Antwort durch Boxen und werden so lange wiederholt, bis sie sicher beherrscht werden.';
+$string['pluginadministration'] = 'LeitnerFlow-Verwaltung';
 
 $string['questioncategory']        = 'Fragenkategorie';
 $string['questioncategory_help']   = 'Wähle die Kategorie aus der Fragensammlung, aus der Fragen gezogen werden.';
