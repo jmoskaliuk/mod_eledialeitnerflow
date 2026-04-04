@@ -90,6 +90,7 @@ $string['privacy:metadata:leitnerflow_sessions:timecompleted']  = 'Endzeitpunkt 
 $string['privacy:metadata:leitnerflow_sessions:questionsasked'] = 'Anzahl gestellter Fragen.';
 $string['privacy:metadata:leitnerflow_sessions:questionscorrect'] = 'Anzahl richtig beantworteter Fragen.';
 
+$string['leitnerflow:addinstance']   = 'Neue LeitnerFlow-Aktivität hinzufügen';
 $string['leitnerflow:view']          = 'Leitner-Quiz ansehen';
 $string['leitnerflow:attempt']       = 'Leitner-Quiz durchführen';
 $string['leitnerflow:viewreport']    = 'Schülerbericht anzeigen';

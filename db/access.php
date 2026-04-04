@@ -3,6 +3,18 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
 
+    // Add a new LeitnerFlow instance to a course.
+    'mod/leitnerflow:addinstance' => [
+        'riskbitmask'  => RISK_XSS,
+        'captype'      => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes'   => [
+            'editingteacher' => CAP_ALLOW,
+            'manager'        => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'moodle/course:manageactivities',
+    ],
+
     // View the activity (students, teachers)
     'mod/leitnerflow:view' => [
         'captype'      => 'read',

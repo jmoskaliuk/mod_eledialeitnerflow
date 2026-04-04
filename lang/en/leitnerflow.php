@@ -97,6 +97,7 @@ $string['privacy:metadata:leitnerflow_sessions:questionsasked'] = 'Number of que
 $string['privacy:metadata:leitnerflow_sessions:questionscorrect'] = 'Number of correct answers in the session.';
 
 // Capabilities
+$string['leitnerflow:addinstance']   = 'Add a new LeitnerFlow activity';
 $string['leitnerflow:view']          = 'View Leitner Flow';
 $string['leitnerflow:attempt']       = 'Attempt Leitner Flow';
 $string['leitnerflow:viewreport']    = 'View student report';
