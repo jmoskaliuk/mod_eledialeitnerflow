@@ -46,35 +46,33 @@ class mod_leitnerflow_mod_form extends moodleform_mod {
         $mform->addElement('header', 'questionbanksettings', get_string('questioncategory', 'mod_leitnerflow'));
 
         // Load all question categories accessible from this course.
-        // Include categories from the course context AND all parent contexts (system, course category).
+        // Search in all contexts the course has access to (course, coursecat, system).
         $coursecontext = \core\context\course::instance($COURSE->id);
-        $contexts = new \core_question\local\bank\question_edit_contexts($coursecontext);
-        $allcontexts = $contexts->having_cap('moodle/question:useall');
+        $contextids = $coursecontext->get_parent_context_ids(true); // Includes self.
 
         $categories = [];
-        foreach ($allcontexts as $ctx) {
-            $cats = $DB->get_records('question_categories', ['contextid' => $ctx->id], 'sortorder, name');
+        if (!empty($contextids)) {
+            list($insql, $inparams) = $DB->get_in_or_equal($contextids, SQL_PARAMS_NAMED);
+            $sql = "SELECT qc.id, qc.name, qc.contextid, ctx.contextlevel
+                      FROM {question_categories} qc
+                      JOIN {context} ctx ON ctx.id = qc.contextid
+                     WHERE qc.contextid {$insql}
+                  ORDER BY ctx.contextlevel DESC, qc.sortorder, qc.name";
+            $cats = $DB->get_records_sql($sql, $inparams);
             foreach ($cats as $cat) {
-                $contextname = $ctx->get_context_name(false, true);
-                $categories[$cat->id] = $cat->name . ' (' . $contextname . ')';
+                $ctx = \context::instance_by_id($cat->contextid);
+                $categories[$cat->id] = $cat->name . ' (' . $ctx->get_context_name(false, true) . ')';
             }
         }
 
         if (empty($categories)) {
-            // Fallback: try to load from course context directly.
-            $cats = $DB->get_records_menu('question_categories',
-                ['contextid' => $coursecontext->id], 'name', 'id,name');
-            if (!empty($cats)) {
-                $categories = $cats;
-            } else {
-                $mform->addElement('static', 'nocategory_warning', '',
-                    html_writer::tag('div',
-                        get_string('nocategory', 'mod_leitnerflow'),
-                        ['class' => 'alert alert-warning']
-                    )
-                );
-                $categories = [0 => '---'];
-            }
+            $mform->addElement('static', 'nocategory_warning', '',
+                html_writer::tag('div',
+                    get_string('nocategory', 'mod_leitnerflow'),
+                    ['class' => 'alert alert-warning']
+                )
+            );
+            $categories = [0 => '---'];
         }
 
         $mform->addElement('select', 'questioncategoryid',
