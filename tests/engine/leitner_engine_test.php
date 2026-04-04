@@ -352,21 +352,30 @@ final class leitner_engine_test extends \advanced_testcase {
     // -----------------------------------------------------------------------
 
     public function test_get_box_distribution_groups_cards_correctly(): void {
-        $lqdb = $this->create_lq(['boxcount' => 3, 'questioncategoryid' => 9999]);
-        $user  = $this->getDataGenerator()->create_user();
-        $gen   = $this->getDataGenerator()->get_plugin_generator('mod_eledialeitnerflow');
+        // get_box_distribution() iterates over the question category, so we need
+        // real questions in a real category — fake category IDs won't work here.
+        $qgen = $this->getDataGenerator()->get_plugin_generator('core_question');
+        $qcat = $qgen->create_question_category();
+        $q10  = $qgen->create_question('shortanswer', null, ['category' => $qcat->id]);
+        $q11  = $qgen->create_question('shortanswer', null, ['category' => $qcat->id]);
+        $q12  = $qgen->create_question('shortanswer', null, ['category' => $qcat->id]);
+        $q13  = $qgen->create_question('shortanswer', null, ['category' => $qcat->id]);
 
-        // Insert cards directly at specific boxes.
-        $gen->create_card_state(['eledialeitnerflowid' => $lqdb->id, 'userid' => $user->id,
-            'questionid' => 10, 'currentbox' => 1, 'status' => leitner_engine::STATUS_OPEN]);
-        $gen->create_card_state(['eledialeitnerflowid' => $lqdb->id, 'userid' => $user->id,
-            'questionid' => 11, 'currentbox' => 1, 'status' => leitner_engine::STATUS_ERROR]);
-        $gen->create_card_state(['eledialeitnerflowid' => $lqdb->id, 'userid' => $user->id,
-            'questionid' => 12, 'currentbox' => 2, 'status' => leitner_engine::STATUS_OPEN]);
-        $gen->create_card_state(['eledialeitnerflowid' => $lqdb->id, 'userid' => $user->id,
-            'questionid' => 13, 'currentbox' => 3, 'status' => leitner_engine::STATUS_LEARNED]); // Excluded.
+        $lqdb = $this->create_lq(['boxcount' => 3, 'questioncategoryid' => $qcat->id]);
+        $user = $this->getDataGenerator()->create_user();
+        $gen  = $this->getDataGenerator()->get_plugin_generator('mod_eledialeitnerflow');
 
-        $dist = leitner_engine::get_box_distribution($lqdb->id, $user->id, 9999, 3);
+        // Insert card states at specific boxes, tied to the real question IDs.
+        $gen->create_card_state(['eledialeitnerflowid' => $lqdb->id, 'userid' => $user->id,
+            'questionid' => $q10->id, 'currentbox' => 1, 'status' => leitner_engine::STATUS_OPEN]);
+        $gen->create_card_state(['eledialeitnerflowid' => $lqdb->id, 'userid' => $user->id,
+            'questionid' => $q11->id, 'currentbox' => 1, 'status' => leitner_engine::STATUS_ERROR]);
+        $gen->create_card_state(['eledialeitnerflowid' => $lqdb->id, 'userid' => $user->id,
+            'questionid' => $q12->id, 'currentbox' => 2, 'status' => leitner_engine::STATUS_OPEN]);
+        $gen->create_card_state(['eledialeitnerflowid' => $lqdb->id, 'userid' => $user->id,
+            'questionid' => $q13->id, 'currentbox' => 3, 'status' => leitner_engine::STATUS_LEARNED]); // Excluded.
+
+        $dist = leitner_engine::get_box_distribution($lqdb->id, $user->id, $qcat->id, 3);
 
         $this->assertEquals(2, $dist[1], 'Box 1 should have 2 cards (open + error)');
         $this->assertEquals(1, $dist[2], 'Box 2 should have 1 card');
