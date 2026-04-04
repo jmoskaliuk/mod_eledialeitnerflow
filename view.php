@@ -24,6 +24,7 @@
 
 require_once(__DIR__ . '/../../config.php');
 require_once(__DIR__ . '/lib.php');
+require_once($CFG->dirroot . '/question/engine/lib.php');
 
 use mod_leitnerflow\engine\leitner_engine;
 
