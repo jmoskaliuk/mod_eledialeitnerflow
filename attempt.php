@@ -198,13 +198,14 @@ echo $OUTPUT->header();
 // ---- Back to overview button ----
 echo $OUTPUT->single_button($viewurl, get_string('backtooverview', 'mod_leitnerflow'), 'get');
 
-// ---- Box-flow pills (compact, centered) ----
+// ---- Box-flow pills (centered, no "Learned" box) ----
 $boxcount = (int) $leitnerflow->boxcount;
-echo html_writer::start_div('d-flex align-items-center justify-content-center gap-1 my-2 small');
+echo html_writer::start_div('text-center my-3');
+echo html_writer::start_div('d-inline-flex align-items-center gap-2');
 for ($b = 1; $b <= $boxcount; $b++) {
-    $pillclass = 'badge rounded-pill ';
+    $pillclass = 'badge rounded-pill px-3 py-2 ';
     if ($b === $currentbox) {
-        $pillclass .= 'bg-primary';
+        $pillclass .= 'bg-primary fs-6';
     } else {
         $pillclass .= 'bg-light text-dark border';
     }
@@ -213,14 +214,10 @@ for ($b = 1; $b <= $boxcount; $b++) {
         $pillclass
     );
     if ($b < $boxcount) {
-        echo html_writer::span('&#10140;', 'text-muted', ['aria-hidden' => 'true']);
+        echo html_writer::span('&#10140;', 'text-muted');
     }
 }
-echo html_writer::span('&#10140;', 'text-muted', ['aria-hidden' => 'true']);
-echo html_writer::span(
-    '&#10003; ' . get_string('learned', 'mod_leitnerflow'),
-    'badge rounded-pill bg-success'
-);
+echo html_writer::end_div();
 echo html_writer::end_div();
 
 // ---- Question form ----

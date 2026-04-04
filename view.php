@@ -259,17 +259,14 @@ if ($canattempt) {
             $recentpct = ($recenttotal > 0) ? round(($recentcorrect / $recenttotal) * 100) : 0;
 
             if ($recentpct > $sessionstats->avgpercent + 5) {
-                $trendclass = 'text-success fw-bold';
-                $trendicon  = '&#9650;'; // ▲ green
+                $trendicon = '&#x1F4C8;'; // 📈
             } else if ($recentpct < $sessionstats->avgpercent - 5) {
-                $trendclass = 'text-danger fw-bold';
-                $trendicon  = '&#9660;'; // ▼ red
+                $trendicon = '&#x1F4C9;'; // 📉
             } else {
-                $trendclass = 'text-primary fw-bold';
-                $trendicon  = '&#9654;'; // ▶ blue
+                $trendicon = '&#x2705;'; // ✅
             }
             echo html_writer::div(
-                html_writer::span($trendicon, $trendclass)
+                html_writer::span($trendicon)
                 . ' '
                 . html_writer::span(
                     get_string('trend_recent', 'mod_leitnerflow', (object) [
