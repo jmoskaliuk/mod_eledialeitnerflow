@@ -166,103 +166,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $session->currentindex = $currentindex + 1;
 
-    $islast = ($session->currentindex >= $totalquestions);
+    if ($session->currentindex >= $totalquestions) {
+        _leitnerflow_finish_session($session, $leitnerflow, $cm, $course);
+        exit;
+    }
+
     $DB->update_record('leitnerflow_sessions', $session);
 
-    // ---- Show transition animation before moving to next question ----
-    $nexturl = $islast
-        ? new moodle_url('/mod/leitnerflow/attempt.php', ['id' => $cmid, 'sessid' => $sessid])
-        : new moodle_url('/mod/leitnerflow/attempt.php', ['id' => $cmid, 'sessid' => $sessid]);
-
-    $PAGE->set_url('/mod/leitnerflow/attempt.php', ['id' => $cmid, 'sessid' => $sessid]);
-    $PAGE->set_title(format_string($leitnerflow->name));
-    $PAGE->set_heading(format_string($course->fullname));
-    $PAGE->set_context($context);
-    $PAGE->add_body_class('mod-leitnerflow-attempt');
-
-    echo $OUTPUT->header();
-
-    echo html_writer::start_div('leitnerflow-attempt-container');
-
-    // Feedback message.
-    if ($correct) {
-        if ($islearned) {
-            $feedbackmsg = get_string('cardlearned', 'mod_leitnerflow');
-            $feedbackclass = 'alert alert-success text-center';
-        } else {
-            $feedbackmsg = get_string('movedtobox', 'mod_leitnerflow', $newbox);
-            $feedbackclass = 'alert alert-success text-center';
-        }
-    } else {
-        if ($oldbox !== $newbox) {
-            $feedbackmsg = get_string('cardbackone', 'mod_leitnerflow');
-        } else {
-            $feedbackmsg = get_string('incorrect', 'mod_leitnerflow');
-        }
-        $feedbackclass = 'alert alert-warning text-center';
+    // Redirect to next question (with animation params if enabled).
+    $urlparams = ['id' => $cmid, 'sessid' => $sessid];
+    if (!empty($leitnerflow->showanimation)) {
+        $urlparams['anim']    = 1;
+        $urlparams['frombox'] = $oldbox;
+        $urlparams['tobox']   = $newbox;
+        $urlparams['ok']      = $correct ? 1 : 0;
+        $urlparams['learned'] = $islearned ? 1 : 0;
     }
-    echo html_writer::div($feedbackmsg, $feedbackclass, ['id' => 'lf-transition-feedback']);
-
-    // Box-flow pills with animation data.
-    $boxcount = (int) $leitnerflow->boxcount;
-    echo html_writer::start_div('text-center my-4');
-    echo html_writer::start_div('d-inline-flex align-items-center gap-2');
-    for ($b = 1; $b <= $boxcount; $b++) {
-        $pillclass = 'badge rounded-pill px-3 py-2 lf-transition-box ';
-        $pillattrs = ['data-box' => $b];
-        if ($b === $oldbox) {
-            $pillclass .= 'bg-primary fs-6';
-            $pillattrs['id'] = 'lf-box-from';
-        } else if ($b === $newbox && $newbox !== $oldbox) {
-            $pillclass .= 'bg-light text-dark border';
-            $pillattrs['id'] = 'lf-box-to';
-        } else {
-            $pillclass .= 'bg-light text-dark border';
-        }
-        echo html_writer::span(
-            get_string('box_n', 'mod_leitnerflow', $b),
-            $pillclass,
-            $pillattrs
-        );
-        if ($b < $boxcount) {
-            echo html_writer::span('&#10140;', 'text-muted lf-transition-arrow',
-                ['data-arrow-after' => $b]);
-        }
-    }
-    // Learned indicator.
-    if ($islearned) {
-        echo html_writer::span('&#10140;', 'text-muted lf-transition-arrow');
-        echo html_writer::span(
-            get_string('learned', 'mod_leitnerflow') . ' &#10003;',
-            'badge rounded-pill px-3 py-2 bg-light text-dark border',
-            ['id' => 'lf-box-learned']
-        );
-    }
-    echo html_writer::end_div();
-    echo html_writer::end_div();
-
-    // Progress counter.
-    echo html_writer::div(
-        get_string('question') . ' ' . ($currentindex + 1) . ' / ' . $totalquestions
-        . ' &middot; '
-        . html_writer::tag('b', $session->questionscorrect) . ' / ' . $session->questionsasked
-        . ' ' . get_string('correct', 'mod_leitnerflow'),
-        'text-center text-muted mt-2'
-    );
-
-    echo html_writer::end_div(); // leitnerflow-attempt-container
-
-    // Pass animation data to JS.
-    $PAGE->requires->js_call_amd('mod_leitnerflow/card_transition', 'init', [
-        $nexturl->out(false),
-        $correct,
-        $oldbox,
-        $newbox,
-        $islearned,
-    ]);
-
-    echo $OUTPUT->footer();
-    exit;
+    redirect(new moodle_url('/mod/leitnerflow/attempt.php', $urlparams));
 }
 
 // ---- Render the current question -------------------------------------------
@@ -285,7 +205,39 @@ $questionid = $questionids[$currentindex];
 $cardstate  = leitner_engine::get_card_state($leitnerflow->id, $USER->id, $questionid);
 $currentbox = $cardstate ? (int)$cardstate->currentbox : 1;
 
+// Animation params from previous answer (passed via URL).
+$showanim   = optional_param('anim', 0, PARAM_INT);
+$animfrombox = optional_param('frombox', 0, PARAM_INT);
+$animtobox   = optional_param('tobox', 0, PARAM_INT);
+$animok      = optional_param('ok', 0, PARAM_INT);
+$animlearned = optional_param('learned', 0, PARAM_INT);
+
 echo $OUTPUT->header();
+
+// ---- Transition feedback banner (auto-fades) ----
+if ($showanim) {
+    if ($animok) {
+        if ($animlearned) {
+            $feedbackmsg = get_string('cardlearned', 'mod_leitnerflow');
+        } else {
+            $feedbackmsg = get_string('movedtobox', 'mod_leitnerflow', $animtobox);
+        }
+        $feedbackclass = 'alert alert-success';
+    } else {
+        if ($animfrombox !== $animtobox) {
+            $feedbackmsg = get_string('cardbackone', 'mod_leitnerflow');
+        } else {
+            $feedbackmsg = get_string('incorrect', 'mod_leitnerflow');
+        }
+        $feedbackclass = 'alert alert-warning';
+    }
+    echo html_writer::div($feedbackmsg, $feedbackclass . ' text-center lf-feedback-banner');
+
+    // Load fade-out JS.
+    $PAGE->requires->js_call_amd('mod_leitnerflow/card_transition', 'init', [
+        $animfrombox, $animtobox, $animok, $animlearned,
+    ]);
+}
 
 // ---- Centered question container (like Moodle Quiz) ----
 echo html_writer::start_div('leitnerflow-attempt-container');
@@ -303,7 +255,8 @@ for ($b = 1; $b <= $boxcount; $b++) {
     }
     echo html_writer::span(
         get_string('box_n', 'mod_leitnerflow', $b),
-        $pillclass
+        $pillclass,
+        ['data-box' => $b]
     );
     if ($b < $boxcount) {
         echo html_writer::span('&#10140;', 'text-muted');

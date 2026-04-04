@@ -55,6 +55,9 @@ $string['grademethod']             = 'Bewertungsmethode';
 $string['grademethod_none']        = 'Keine Bewertung';
 $string['grademethod_percent']     = 'Prozentsatz der gelernten Karten';
 $string['gradingsettings']         = 'Bewertungseinstellungen';
+$string['displaysettings']         = 'Anzeige';
+$string['showanimation']           = 'Kartenanimation';
+$string['showanimation_help']      = 'Wenn aktiviert, wird nach jeder Frage eine kurze Animation gezeigt, die anzeigt, in welche Leitner-Box die Karte gewandert ist. Wenn deaktiviert, erscheint sofort die nächste Frage.';
 $string['leitnersettings']         = 'Leitner-System-Einstellungen';
 $string['sessionsettings']         = 'Sitzungseinstellungen';
 

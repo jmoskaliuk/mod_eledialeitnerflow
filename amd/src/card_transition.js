@@ -16,8 +16,8 @@
 /**
  * AMD module: card transition animation between Leitner boxes.
  *
- * Shows a brief animation of the card moving from one box to another
- * after a question is answered, then navigates to the next question.
+ * Shows a brief animation on the box-flow pills when arriving at
+ * the next question, then fades out the feedback banner.
  *
  * @module     mod_leitnerflow/card_transition
  * @package    mod_leitnerflow
@@ -30,50 +30,55 @@ define([], function() {
 
     return {
         /**
-         * Initialize the card transition animation.
+         * Animate the box-flow pills and fade out feedback banner.
          *
-         * @param {string} nextUrl - URL to navigate to after animation.
+         * @param {number} fromBox - The box the card was in before.
+         * @param {number} toBox - The box the card moved to.
          * @param {boolean} correct - Whether the answer was correct.
-         * @param {number} oldBox - The box the card was in before.
-         * @param {number} newBox - The box the card moved to.
-         * @param {boolean} isLearned - Whether the card is now learned.
+         * @param {boolean} learned - Whether the card is now learned.
          */
-        init: function(nextUrl, correct, oldBox, newBox, isLearned) {
-            var fromEl = document.getElementById('lf-box-from');
-            var toEl = document.getElementById('lf-box-to');
-            var learnedEl = document.getElementById('lf-box-learned');
+        init: function(fromBox, toBox, correct, learned) {
+            // Find the pill for the target box and briefly highlight it.
+            var pills = document.querySelectorAll('.lf-transition-box, [data-box]');
+            if (!pills.length) {
+                // Fallback: find pills by class in the box-flow.
+                pills = document.querySelectorAll('.badge.rounded-pill');
+            }
 
-            // Step 1: After a short delay, animate the source box.
-            setTimeout(function() {
-                if (fromEl) {
-                    fromEl.classList.add('lf-anim-pulse-out');
+            pills.forEach(function(pill) {
+                var boxNum = parseInt(pill.getAttribute('data-box'), 10);
+                if (!boxNum) {
+                    return;
                 }
-            }, 300);
-
-            // Step 2: After pulse-out, highlight the target box.
-            setTimeout(function() {
-                if (fromEl) {
-                    fromEl.classList.remove('bg-primary', 'fs-6');
-                    fromEl.classList.add('bg-light', 'text-dark', 'border');
+                if (boxNum === toBox && toBox !== fromBox) {
+                    // Highlight target box.
+                    setTimeout(function() {
+                        pill.classList.add('lf-anim-pulse-in');
+                        if (correct) {
+                            pill.style.boxShadow = '0 0 12px rgba(102, 153, 51, 0.6)';
+                        } else {
+                            pill.style.boxShadow = '0 0 12px rgba(249, 128, 18, 0.6)';
+                        }
+                        // Remove highlight after animation.
+                        setTimeout(function() {
+                            pill.classList.remove('lf-anim-pulse-in');
+                            pill.style.boxShadow = '';
+                        }, 1000);
+                    }, 200);
                 }
+            });
 
-                if (isLearned && learnedEl) {
-                    learnedEl.classList.remove('bg-light', 'text-dark', 'border');
-                    learnedEl.classList.add('bg-success', 'text-white', 'lf-anim-pulse-in');
-                } else if (toEl) {
-                    toEl.classList.remove('bg-light', 'text-dark', 'border');
-                    if (correct) {
-                        toEl.classList.add('bg-success', 'text-white', 'lf-anim-pulse-in');
-                    } else {
-                        toEl.classList.add('bg-warning', 'text-dark', 'lf-anim-pulse-in');
-                    }
-                }
-            }, 800);
-
-            // Step 3: Navigate to next question.
-            setTimeout(function() {
-                window.location.href = nextUrl;
-            }, 1800);
+            // Fade out feedback banner after 2.5 seconds.
+            var banner = document.querySelector('.lf-feedback-banner');
+            if (banner) {
+                setTimeout(function() {
+                    banner.style.transition = 'opacity 0.5s ease-out';
+                    banner.style.opacity = '0';
+                    setTimeout(function() {
+                        banner.style.display = 'none';
+                    }, 500);
+                }, 2500);
+            }
         }
     };
 });

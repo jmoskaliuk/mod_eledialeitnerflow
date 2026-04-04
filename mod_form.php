@@ -150,6 +150,15 @@ class mod_leitnerflow_mod_form extends moodleform_mod {
             get_string('grademethod', 'mod_leitnerflow'), $gradeoptions);
         $mform->setDefault('grademethod', 0);
 
+        // ---- Display settings -------------------------------------------------
+        $mform->addElement('header', 'displaysettingsheader',
+            get_string('displaysettings', 'mod_leitnerflow'));
+
+        $mform->addElement('selectyesno', 'showanimation',
+            get_string('showanimation', 'mod_leitnerflow'));
+        $mform->addHelpButton('showanimation', 'showanimation', 'mod_leitnerflow');
+        $mform->setDefault('showanimation', 1);
+
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
     }

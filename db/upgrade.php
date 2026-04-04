@@ -49,5 +49,17 @@ function xmldb_leitnerflow_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2024120106, 'leitnerflow');
     }
 
+    // Add showanimation field (default: on).
+    if ($oldversion < 2024120109) {
+        $table = new xmldb_table('leitnerflow');
+        $field = new xmldb_field('showanimation', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '1', 'grademethod');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_mod_savepoint(true, 2024120109, 'leitnerflow');
+    }
+
     return true;
 }

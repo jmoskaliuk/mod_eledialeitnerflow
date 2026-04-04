@@ -19,6 +19,7 @@
         <FIELD NAME="prioritystrategy"   TYPE="int"  LENGTH="1"  NOTNULL="true" DEFAULT="0"  COMMENT="0=priority box1 first, 1=mixed random"/>
         <FIELD NAME="grade"              TYPE="int"  LENGTH="10" NOTNULL="true" DEFAULT="0"  COMMENT="Max grade (0 = no grade)"/>
         <FIELD NAME="grademethod"        TYPE="int"  LENGTH="2"  NOTNULL="true" DEFAULT="0"  COMMENT="0=no grade, 1=percentage learned"/>
+        <FIELD NAME="showanimation"     TYPE="int"  LENGTH="1"  NOTNULL="true" DEFAULT="1"  COMMENT="1=show card-move animation, 0=off"/>
         <FIELD NAME="timecreated"        TYPE="int"  LENGTH="10" NOTNULL="true" DEFAULT="0"/>
         <FIELD NAME="timemodified"       TYPE="int"  LENGTH="10" NOTNULL="true" DEFAULT="0"/>
       </FIELDS>

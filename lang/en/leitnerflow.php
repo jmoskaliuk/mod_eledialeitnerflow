@@ -67,6 +67,9 @@ $string['grademethod']               = 'Grading';
 $string['grademethod_none']          = 'No grade';
 $string['grademethod_percent']       = '% of cards learned';
 $string['gradingsettings']           = 'Grading';
+$string['displaysettings']           = 'Display';
+$string['showanimation']             = 'Card animation';
+$string['showanimation_help']        = 'When enabled, a brief visual animation shows which Leitner box the card moved to after answering a question. When disabled, the next question appears immediately.';
 $string['leitnersettings']           = 'Leitner system';
 $string['sessionsettings']           = 'Session';
 
