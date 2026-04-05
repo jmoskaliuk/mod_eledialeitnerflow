@@ -1,61 +1,78 @@
-# LeitnerFlow by eLeDia | Dokumentation
+# 📘 LeitnerFlow Dokumentation
 
-Willkommen zur Benutzerdokumentation für **LeitnerFlow**, die Spaced-Repetition-Aktivität für Moodle.
+Willkommen zur offiziellen Dokumentation von **LeitnerFlow** – der Spaced-Repetition-Aktivität für Moodle.
 
-LeitnerFlow nutzt das bewährte Leitner-Karteikartenprinzip: Fragen aus der Fragensammlung werden als virtuelle Lernkarten organisiert. Richtig beantwortete Karten steigen auf, falsch beantwortete Karten fallen – je nach Konfiguration – zurück. So konzentrieren sich Lernende automatisch auf Inhalte, die noch nicht sicher beherrscht werden.
+---
 
-## Inhalt
+## 🚀 Was ist LeitnerFlow?
 
-### Für Administrator:innen
-- [Installation](installation.md)
+LeitnerFlow basiert auf dem **Leitner-Prinzip**:
 
-### Für Lehrende
-- [Erste Schritte](getting-started.md)
-- [Benutzung](usage.md)
+- Fragen werden zu Lernkarten  
+- Karten bewegen sich zwischen Boxen  
+- Schwierige Inhalte erscheinen häufiger  
+- Ziel: nachhaltiges Lernen statt einmaliges Abfragen  
 
-### Hilfe
-- [FAQ](faq.md)
+---
 
-## Was ist LeitnerFlow?
+## 🎯 Für wen ist diese Dokumentation?
 
-LeitnerFlow ist eine Moodle-Aktivität für wiederholtes, fokussiertes Üben mit Fragen aus der Moodle-Fragensammlung.
+### 👩‍🏫 Lehrende
+→ [LeitnerFlow im Kurs einsetzen](teacher-guide.md)
 
-### Zentrale Funktionen
+### 🛠️ Administrator:innen
+→ [Installation & Betrieb](admin-guide.md)
 
-- Auswahl von einer oder mehreren Fragenkategorien
-- Leitner-Boxen mit 1 bis 5 Stufen
-- Konfigurierbare Anzahl von Fragen pro Sitzung
-- Unterschiedliche Strategien bei falschen Antworten
-- Fortschrittsanzeige für Lernende
-- Berichte für Lehrende
-- Optionaler Eintrag ins Bewertungsbuch
+### 🎓 Lernende
+→ [Wie funktioniert LeitnerFlow?](student-guide.md)
 
-## Typischer Ablauf
+---
 
-1. Eine Lehrkraft erstellt eine LeitnerFlow-Aktivität.
-2. Es werden passende Fragenkategorien ausgewählt.
-3. Lernende bearbeiten kurze Übungssitzungen.
-4. Karten wechseln abhängig von den Antworten zwischen den Boxen.
-5. Der Lernfortschritt wird im Dashboard sichtbar.
+## ⚙️ Konfiguration
 
-## Zielgruppe
+→ [Einstellungen im Detail](configuration.md)
 
-Diese Dokumentation richtet sich an:
+---
 
-- Moodle-Administrator:innen
-- Lehrende, die eine Aktivität einrichten wollen
-- Personen, die LeitnerFlow in Kursen einsetzen möchten
+## ❗ Hilfe & Support
 
-## Hinweis zu GitHub Pages
+→ [Probleme lösen (Troubleshooting)](troubleshooting.md)  
+→ [Häufige Fragen (FAQ)](faq.md)
 
-Diese Dokumentation ist dafür vorbereitet, über **GitHub Pages** veröffentlicht zu werden.
+---
 
-Dafür im Repository bitte in **Settings → Pages** Folgendes einstellen:
+## 💡 Best Practices
 
-- **Source**: `Deploy from a branch`
-- **Branch**: `main`
-- **Folder**: `/docs`
+LeitnerFlow funktioniert am besten:
 
-Danach ist die Doku unter der GitHub-Pages-URL des Repositories erreichbar.
+- in kurzen, regelmäßigen Sessions  
+- mit klar formulierten Fragen  
+- über längere Zeiträume hinweg  
+- kombiniert mit Feedback und Reflexion  
+
+---
+
+## 📊 Didaktischer Mehrwert
+
+LeitnerFlow unterstützt:
+
+- nachhaltiges Lernen durch Wiederholung  
+- Fokus auf schwierige Inhalte  
+- selbstgesteuertes Lernen  
+- transparente Fortschrittsentwicklung  
+
+---
+
+## 🔧 Technischer Kontext
+
+- basiert auf der Moodle Question Engine  
+- nutzt Fragen aus der Fragensammlung  
+- vollständig integrierbar in Kurse  
+
+---
+
+## 🧠 Kurz gesagt
+
+👉 LeitnerFlow macht aus Moodle-Fragen ein intelligentes Lernsystem.
 
 <!-- trigger -->
