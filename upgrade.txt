@@ -1,0 +1,59 @@
+This file describes API changes in the LeitnerFlow activity module
+(mod_eledialeitnerflow) relevant to plugin developers and integrators.
+It lists breaking changes and notable refactors per released version, using
+the same format as upgrade.txt files in core Moodle subsystems.
+
+=== 2.3.0 ===
+
+* New DB field mdl_eledialeitnerflow.questioncategoryids (TEXT). Replaces
+  questioncategoryid, which is kept for backward compatibility but no longer
+  written to. Code reading the question source should prefer the new field
+  and fall back to questioncategoryid only when the TEXT column is empty.
+
+* New DB fields on mdl_eledialeitnerflow: feedbackstyle (VARCHAR 20),
+  showanimation (INT 1), animationdelay (INT 4), showtour (INT 1).
+
+* New DB fields on mdl_eledialeitnerflow_sessions: currentstreak (INT 4),
+  beststreak (INT 4). Populated only when feedbackstyle = 'gamified'.
+
+* leitner_engine::calculate_box() now uses a linear spread formula
+  (floor($correctcount * $boxcount / $correcttolearn)) instead of the
+  previous step-based calculation. External code calling this method should
+  re-verify any cached box assignments.
+
+* Upgrade step 2024120124 migrates or removes orphaned grade_items rows whose
+  itemmodule still references the pre-rename component name 'leitnerflow'.
+  Sites that had the plugin installed under its previous name should run
+  this upgrade before regenerating any course grades.
+
+* PHPUnit test suite migrated to PHPUnit 11 attributes
+  (#[CoversClass], #[DataProvider]). External test extensions should update
+  accordingly.
+
+=== 2.2.0 ===
+
+* Privacy API provider introduced at
+  mod_eledialeitnerflow\privacy\provider. Plugins consuming our data
+  through core_privacy exports should reference this class.
+
+* Gradebook callbacks added in lib.php:
+  eledialeitnerflow_grade_item_update(),
+  eledialeitnerflow_grade_item_delete(),
+  eledialeitnerflow_update_grades(),
+  eledialeitnerflow_get_user_grade(),
+  eledialeitnerflow_get_all_grades().
+
+=== 2.1.0 ===
+
+* Backup/restore implemented. The backup task class is
+  backup_eledialeitnerflow_activity_task; restore counterpart follows the
+  restore_eledialeitnerflow_activity_task naming.
+
+=== 2.0.0 ===
+
+* Plugin component renamed from mod_leitnerflow to mod_eledialeitnerflow.
+  All functions, classes, DB tables, capabilities, and language strings
+  have been renamed accordingly. The db/upgrade.php step at version
+  2024120100 handles the automatic migration of tables and grade_items.
+  Third-party integrations must update any hard-coded references to the
+  old component name.

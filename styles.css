@@ -121,12 +121,12 @@
 }
 
 /* ---- Per-box progress bar segment colors ---- */
-.lf-seg-box1 { background-color: var(--lf-orange) !important; }
-.lf-seg-box2 { background-color: var(--lf-middle-orange) !important; }
-.lf-seg-box3 { background-color: var(--lf-aqua) !important; }
-.lf-seg-box4 { background-color: var(--lf-light-blue) !important; }
-.lf-seg-box5 { background-color: var(--lf-dark-blue) !important; }
-.lf-seg-learned { background-color: var(--lf-green) !important; }
+.path-mod-eledialeitnerflow .lf-seg-box1 { background-color: var(--lf-orange) !important; }
+.path-mod-eledialeitnerflow .lf-seg-box2 { background-color: var(--lf-middle-orange) !important; }
+.path-mod-eledialeitnerflow .lf-seg-box3 { background-color: var(--lf-aqua) !important; }
+.path-mod-eledialeitnerflow .lf-seg-box4 { background-color: var(--lf-light-blue) !important; }
+.path-mod-eledialeitnerflow .lf-seg-box5 { background-color: var(--lf-dark-blue) !important; }
+.path-mod-eledialeitnerflow .lf-seg-learned { background-color: var(--lf-green) !important; }
 
 /* ---- View page: align notifications with card content ---- */
 .mod-eledialeitnerflow #user-notifications .alert {
@@ -154,15 +154,15 @@
     100% { transform: scale(1); opacity: 1; }
 }
 
-.lf-anim-pulse-out {
+.path-mod-eledialeitnerflow .lf-anim-pulse-out {
     animation: lf-pulse-out 0.5s ease-out forwards;
 }
 
-.lf-anim-pulse-in {
+.path-mod-eledialeitnerflow .lf-anim-pulse-in {
     animation: lf-pulse-in 0.5s ease-out forwards;
 }
 
-.lf-transition-box {
+.path-mod-eledialeitnerflow .lf-transition-box {
     transition: all 0.3s ease;
 }
 
@@ -172,31 +172,31 @@
     100% { transform: translateY(-30px); opacity: 0.2; }
 }
 
-.lf-points-float {
+.path-mod-eledialeitnerflow .lf-points-float {
     font-size: 1.5rem;
     font-weight: 800;
     display: inline-block;
 }
 
-.lf-points-float.lf-points-animate {
+.path-mod-eledialeitnerflow .lf-points-float.lf-points-animate {
     animation: lf-float-up 1.5s ease-out forwards;
 }
 
-.lf-streak-badge {
+.path-mod-eledialeitnerflow .lf-streak-badge {
     display: inline-block;
     margin-top: 0.25rem;
 }
 
-.lf-streak-broken {
+.path-mod-eledialeitnerflow .lf-streak-broken {
     font-style: italic;
 }
 
-.lf-milestone {
+.path-mod-eledialeitnerflow .lf-milestone {
     font-weight: 600;
     font-size: 1rem;
 }
 
-.lf-gamified-feedback {
+.path-mod-eledialeitnerflow .lf-gamified-feedback {
     padding: 0.5rem 0;
 }
 
@@ -206,7 +206,7 @@
     100% { opacity: 1; transform: translateY(0); }
 }
 
-.lf-feedback-banner {
+.path-mod-eledialeitnerflow .lf-feedback-banner {
     animation: lf-fade-in 0.3s ease-out;
 }
 
@@ -218,7 +218,7 @@
 }
 
 /* ---- Report page: accessible summary card ---- */
-.lf-bg-darkblue {
+.path-mod-eledialeitnerflow .lf-bg-darkblue {
     background-color: var(--lf-dark-blue) !important;
     color: #fff !important;
 }
