@@ -1,4 +1,4 @@
-# LeitnerFlow Dokumentation
+# LeitnerFlow by eLeDia | Dokumentation
 
 Willkommen zur Benutzerdokumentation für **LeitnerFlow**, die Spaced-Repetition-Aktivität für Moodle.
 
