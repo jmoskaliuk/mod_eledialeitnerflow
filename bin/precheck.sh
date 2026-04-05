@@ -77,7 +77,7 @@ check_phpcs() {
         return
     fi
     local out rc
-    out=$(run_in_container "vendor/bin/phpcs --standard=moodle --extensions=php,inc --report=full ${PLUGIN_REL}" 2>&1)
+    out=$(run_in_container "vendor/bin/phpcs --standard=vendor/moodlehq/moodle-cs/moodle --extensions=php,inc --report=full ${PLUGIN_REL}" 2>&1)
     rc=$?
     if [[ ${rc} -eq 0 ]]; then
         record phpcs PASS "0 errors, 0 warnings"
@@ -128,7 +128,7 @@ check_js() {
         return
     fi
     local out rc
-    out=$(run_in_container "cd ${DIRROOT_IN_CONTAINER} && npx grunt eslint --root=${PLUGIN_REL#public/}" 2>&1)
+    out=$(run_in_container "cd ${DIRROOT_IN_CONTAINER} && npx grunt eslint --root=${PLUGIN_ABS_IN_CONTAINER}" 2>&1)
     rc=$?
     if [[ ${rc} -eq 0 ]]; then
         record js PASS "eslint clean"
@@ -148,7 +148,7 @@ check_css() {
     # Static namespace check: every top-level class selector should sit under .path-mod-eledialeitnerflow
     # OR have a frankenstyle prefix in its name.
     local bad
-    bad=$(grep -nE "^\.[a-zA-Z_-]+" "${styles}" | grep -vE "\.path-mod-eledialeitnerflow|\.eledialeitnerflow|\.lf-" || true)
+    bad=$(grep -nE "^\.[a-zA-Z_-]+" "${styles}" | grep -vE "\.path-mod-eledialeitnerflow|\.mod-eledialeitnerflow|\.eledialeitnerflow|\.lf-" || true)
     if [[ -z "${bad}" ]]; then
         record css PASS "selectors namespaced (lf- prefix or path-mod-*)"
     else
