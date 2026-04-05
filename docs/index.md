@@ -57,3 +57,5 @@ Dafür im Repository bitte in **Settings → Pages** Folgendes einstellen:
 - **Folder**: `/docs`
 
 Danach ist die Doku unter der GitHub-Pages-URL des Repositories erreichbar.
+
+<!-- trigger -->
