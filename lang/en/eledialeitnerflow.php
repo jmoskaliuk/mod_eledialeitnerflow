@@ -34,6 +34,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['activityname']       = 'LeitnerFlow';
 $string['activesessioninfo']  = 'Active session: {$a->answered} of {$a->total} answered, {$a->correct} correct';
 $string['alllearned']         = 'All questions learned!';
 $string['animationdelay']            = 'Animation delay';
