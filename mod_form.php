@@ -263,6 +263,8 @@ class mod_eledialeitnerflow_mod_form extends moodleform_mod {
 
     /**
      * Pre-process form data for display — convert comma-separated IDs to array.
+     *
+     * @param array $defaultvalues The default form values to pre-process (passed by reference).
      */
     public function data_preprocessing(&$defaultvalues): void {
         if (!empty($defaultvalues['questioncategoryids'])) {

@@ -33,15 +33,6 @@ use Behat\Mink\Exception\ExpectationException;
  */
 class behat_mod_eledialeitnerflow extends behat_base {
     /**
-     * Opens the activity chooser on the current course page.
-     *
-     * @Given /^I open the activity chooser$/
-     */
-    public function i_open_the_activity_chooser(): void {
-        $this->execute('behat_course::i_click_on_add_activity_or_resource');
-    }
-
-    /**
      * Installs the bundled LeitnerFlow user tours explicitly.
      *
      * Needed because db/install.php intentionally skips tour import

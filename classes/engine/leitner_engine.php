@@ -79,8 +79,8 @@ class leitner_engine {
      * @param \stdClass $state  The current eledialeitnerflow_card_state record (or null if new)
      * @param bool      $correct Whether the answer was correct
      * @param \stdClass $leitnerflow  The leitnerflow instance settings
-     * @param int       $questionid
-     * @param int       $userid
+     * @param int       $questionid  The ID of the question being answered.
+     * @param int       $userid      The ID of the user answering.
      * @return \stdClass Updated state object (not yet saved to DB)
      */
     public static function process_answer(

@@ -80,9 +80,7 @@ final class leitner_engine_test extends \advanced_testcase {
         return $DB->get_record('eledialeitnerflow', ['id' => $lq->id], '*', MUST_EXIST);
     }
 
-    // -------------------------------------------------------------------------
     // Group 1: calculate_box() — pure function, no DB.
-    // -------------------------------------------------------------------------
 
     /**
      * Test calculate_box method with various correct-count and box-count combinations.
@@ -127,9 +125,7 @@ final class leitner_engine_test extends \advanced_testcase {
         ];
     }
 
-    // -------------------------------------------------------------------------
     // Group 2: process_answer() — correct answers.
-    // -------------------------------------------------------------------------
 
     /**
      * Correct answer on a new card increments correctcount to 1.
@@ -183,9 +179,7 @@ final class leitner_engine_test extends \advanced_testcase {
         $this->assertEquals($lq->boxcount, $state->currentbox, 'Learned card should be in highest box');
     }
 
-    // -------------------------------------------------------------------------
     // Group 3: process_answer() — wrong answers, all 3 behaviors.
-    // -------------------------------------------------------------------------
 
     /**
      * Wrong answer with WRONG_RESET behavior resets correctcount and box to 1.
@@ -281,9 +275,7 @@ final class leitner_engine_test extends \advanced_testcase {
         $this->assertEquals(1, $state->correctcount, 'Rebuilding after reset works');
     }
 
-    // -------------------------------------------------------------------------
     // Group 4: DB persistence — save_card_state() + get_card_state().
-    // -------------------------------------------------------------------------
 
     /**
      * save_card_state() inserts a new record and get_card_state() retrieves it.
@@ -331,9 +323,7 @@ final class leitner_engine_test extends \advanced_testcase {
         $this->assertNull($result, 'Unknown card state should return null, not false or empty object');
     }
 
-    // -------------------------------------------------------------------------
     // Group 5: get_all_card_states() and status counts.
-    // -------------------------------------------------------------------------
 
     /**
      * Card states created via the generator are correctly counted by status.
@@ -371,9 +361,7 @@ final class leitner_engine_test extends \advanced_testcase {
         $this->assertEquals(0, $stats->percent_learned, 'Percentage must be 0, not a division error');
     }
 
-    // -------------------------------------------------------------------------
     // Group 6: get_box_distribution().
-    // -------------------------------------------------------------------------
 
     /**
      * get_box_distribution() correctly groups cards by box and excludes learned cards.
@@ -407,9 +395,7 @@ final class leitner_engine_test extends \advanced_testcase {
         $this->assertEquals(0, $dist[3], 'Box 3: learned card must be excluded from distribution');
     }
 
-    // -------------------------------------------------------------------------
     // Group 7: Session card eligibility.
-    // -------------------------------------------------------------------------
 
     /**
      * Cards set to STATUS_OPEN are all eligible (non-learned).
@@ -453,9 +439,7 @@ final class leitner_engine_test extends \advanced_testcase {
         $this->assertCount(3, $open, 'Only 3 open cards eligible (2 learned must be excluded)');
     }
 
-    // -------------------------------------------------------------------------
     // Group 8: delete_user_data().
-    // -------------------------------------------------------------------------
 
     /**
      * delete_user_data() removes card states and sessions for one user only.
@@ -494,9 +478,7 @@ final class leitner_engine_test extends \advanced_testcase {
         $this->assertEquals(1, $otherstates, "Other user's data must NOT be deleted");
     }
 
-    // -------------------------------------------------------------------------
     // Group 9: Attempt counter always increments.
-    // -------------------------------------------------------------------------
 
     /**
      * attemptcount increments on every answer regardless of correctness.
@@ -513,9 +495,7 @@ final class leitner_engine_test extends \advanced_testcase {
         $this->assertEquals(3, $state->attemptcount, 'After 3rd answer: 3 attempts');
     }
 
-    // -------------------------------------------------------------------------
     // Group 10: Multi-user isolation.
-    // -------------------------------------------------------------------------
 
     /**
      * Card states for different users in the same quiz are fully independent.
@@ -535,15 +515,19 @@ final class leitner_engine_test extends \advanced_testcase {
         $s2 = leitner_engine::get_card_state($lqdb->id, $user2->id, 1);
 
         $this->assertEquals(leitner_engine::STATUS_LEARNED, (int) $s1->status, 'User1 should be learned');
-        $this->assertEquals(leitner_engine::STATUS_OPEN, (int) $s2->status,
-            'User2 should still be open — states are isolated');
-        $this->assertNotEquals($s1->correctcount, $s2->correctcount,
-            'Users must have independent correctcounts');
+        $this->assertEquals(
+            leitner_engine::STATUS_OPEN,
+            (int) $s2->status,
+            'User2 should still be open — states are isolated'
+        );
+        $this->assertNotEquals(
+            $s1->correctcount,
+            $s2->correctcount,
+            'Users must have independent correctcounts'
+        );
     }
 
-    // -------------------------------------------------------------------------
     // Group 11: Edge cases.
-    // -------------------------------------------------------------------------
 
     /**
      * A card that is already learned stays at STATUS_LEARNED even with more correct answers.
@@ -582,9 +566,7 @@ final class leitner_engine_test extends \advanced_testcase {
         $this->assertGreaterThanOrEqual($box3, $box4, 'Boxes must be non-decreasing');
     }
 
-    // -------------------------------------------------------------------------
     // Group 12: get_category_ids().
-    // -------------------------------------------------------------------------
 
     /**
      * get_category_ids() returns IDs from the new multi-category field when available.
@@ -625,9 +607,7 @@ final class leitner_engine_test extends \advanced_testcase {
         $this->assertSame([], $ids, 'Should return empty array when no category set');
     }
 
-    // -------------------------------------------------------------------------
     // Group 13: Session history + stats.
-    // -------------------------------------------------------------------------
 
     /**
      * get_session_history() returns completed sessions, most recent first.

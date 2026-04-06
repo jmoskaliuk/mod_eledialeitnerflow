@@ -3,12 +3,10 @@
   PHPUnit configuration for mod_eledialeitnerflow.
 
   Place this file in the Moodle root alongside the existing phpunit.xml,
-  OR add the <testsuite> block below into the existing phpunit.xml.
+  or add the testsuite block below into the existing phpunit.xml.
 
-  Usage (from Moodle root):
-    php admin/tool/phpunit/cli/init.php
-    vendor/bin/phpunit --testsuite mod_eledialeitnerflow_testsuite
-    vendor/bin/phpunit --testdox --testsuite mod_eledialeitnerflow_testsuite
+  Initialise: php admin/tool/phpunit/cli/init.php
+  Run suite:  vendor/bin/phpunit mod_eledialeitnerflow_testsuite
 -->
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
