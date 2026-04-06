@@ -25,17 +25,16 @@
 /**
  * Execute post-install tasks for mod_eledialeitnerflow.
  *
- * Ensures the multilang filter is active and imports user tours.
+ * Ensures the multilang filter is active. Tours are imported lazily
+ * on first view (via tour_installer) or explicitly via the behat context
+ * step. Importing them here causes tool_usertours/manager.php to crash
+ * during behat/phpunit init when the tours table rows have null steps.
  *
  * @return void
  */
 function xmldb_eledialeitnerflow_install() {
     // Ensure the core multi-language content filter is active (needed for tour translations).
     _eledialeitnerflow_ensure_multilang_filter();
-    // Import the introductory user tour (student).
-    _eledialeitnerflow_import_user_tour();
-    // Import the teacher tour.
-    _eledialeitnerflow_import_user_tour('eledialeitnerflow_teacher');
 }
 
 /**

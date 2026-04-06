@@ -40,4 +40,17 @@ class behat_mod_eledialeitnerflow extends behat_base {
     public function i_open_the_activity_chooser(): void {
         $this->execute('behat_course::i_click_on_add_activity_or_resource');
     }
+
+    /**
+     * Installs the bundled LeitnerFlow user tours explicitly.
+     *
+     * Needed because db/install.php intentionally skips tour import
+     * (tool_usertours may not be available yet during moodle-plugin-ci install).
+     * Behat scenarios that assert tour presence must call this step first.
+     *
+     * @Given the eledialeitnerflow bundled tours are installed
+     */
+    public function the_eledialeitnerflow_bundled_tours_are_installed(): void {
+        \mod_eledialeitnerflow\local\tour_installer::install_bundled_tours();
+    }
 }

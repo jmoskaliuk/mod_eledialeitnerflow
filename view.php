@@ -53,6 +53,10 @@ $PAGE->add_body_class('mod-eledialeitnerflow');
 // Suppress user tour if activity setting disables it.
 if (empty($leitnerflow->showtour)) {
     $PAGE->add_body_class('eledialeitnerflow-notour');
+} else {
+    // Import bundled tours lazily on first view in case db/install.php
+    // ran before tool_usertours was available (fresh install or test env).
+    \mod_eledialeitnerflow\local\tour_installer::install_bundled_tours();
 }
 
 // Handle progress-reset request from teacher.
