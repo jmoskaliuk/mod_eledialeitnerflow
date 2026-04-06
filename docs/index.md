@@ -155,4 +155,3 @@ Für die meisten Kurse ist ein einfacher Start sinnvoll. Ein überschaubarer Rah
 | Einsatzform | kurze, regelmäßige Sessions |
 
 Mit dieser Konfiguration entsteht ein klarer, verständlicher Einstieg, der die Stärke des Leitner-Prinzips sichtbar macht, ohne unnötig komplex zu wirken.
-<!-- trigger -->
