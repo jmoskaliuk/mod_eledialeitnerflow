@@ -47,7 +47,7 @@ class mod_eledialeitnerflow_mod_form extends moodleform_mod {
         // General section.
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
-        $mform->addElement('text', 'name', get_string('name'), ['size' => 64]);
+        $mform->addElement('text', 'name', get_string('activityname', 'moodle'), ['size' => 64]);
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required');
 
