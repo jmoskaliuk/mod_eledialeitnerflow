@@ -25,7 +25,7 @@ Feature: Create and configure a LeitnerFlow activity
     And I am on "Course 1" course homepage with editing mode on
     When I add a "eledialeitnerflow" activity to course "Course 1" section "1"
     And I set the following fields to these values:
-      | Activity name | Test LeitnerFlow |
+      | Name | Test LeitnerFlow |
     And I press "Save and return to course"
     Then I should see "Test LeitnerFlow" in the "region-main" "region"
 
@@ -35,7 +35,7 @@ Feature: Create and configure a LeitnerFlow activity
     And I am on "Course 1" course homepage with editing mode on
     When I add a "eledialeitnerflow" activity to course "Course 1" section "1"
     And I set the following fields to these values:
-      | Activity name            | Leitner Custom    |
+      | Name                     | Leitner Custom    |
       | Number of boxes          | 5                 |
       | Correct answers required | 4                 |
       | On wrong answer          | Back one box      |
@@ -50,7 +50,7 @@ Feature: Create and configure a LeitnerFlow activity
     And I am on "Course 1" course homepage with editing mode on
     When I add a "eledialeitnerflow" activity to course "Course 1" section "1"
     And I set the following fields to these values:
-      | Activity name   | Leitner Display |
+      | Name            | Leitner Display |
       | Feedback style  | Detailed        |
       | Card animation  | No              |
       | Animation delay | 2 s             |
@@ -64,7 +64,7 @@ Feature: Create and configure a LeitnerFlow activity
     And I am on "Course 1" course homepage with editing mode on
     When I add a "eledialeitnerflow" activity to course "Course 1" section "1"
     And I set the following fields to these values:
-      | Activity name | Leitner Graded      |
+      | Name          | Leitner Graded      |
       | Grading       | % of cards learned  |
     And I press "Save and return to course"
     Then I should see "Leitner Graded" in the "region-main" "region"
