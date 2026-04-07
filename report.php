@@ -95,7 +95,8 @@ echo $OUTPUT->heading(get_string('report', 'mod_eledialeitnerflow'), 4);
 // Fetch aggregated stats for all enrolled students.
 $students = leitner_engine::get_all_students_stats($leitnerflow, $course->id, $context);
 
-if (empty($students)) {
+$hasstartedstudents = array_filter($students, fn($s) => $s->sessions > 0);
+if (empty($hasstartedstudents)) {
     echo $OUTPUT->notification(get_string('nostudents', 'mod_eledialeitnerflow'), 'info');
     echo $OUTPUT->single_button($viewurl, get_string('back'), 'get');
     echo $OUTPUT->footer();
