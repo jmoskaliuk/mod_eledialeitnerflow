@@ -1,0 +1,10 @@
+# Release artefacts — built by bin/release.sh, never commit.
+*.zip
+
+# Submission scratch — drafts for the Directory form.
+.submission-draft.md
+
+# Editor / OS droppings.
+.DS_Store
+.idea/
+.vscode/
