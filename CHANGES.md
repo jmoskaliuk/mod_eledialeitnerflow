@@ -4,77 +4,65 @@ All notable changes to **mod_eledialeitnerflow** (LeitnerFlow) are documented in
 this file. Dates use ISO 8601. This project adheres to
 [Semantic Versioning](https://semver.org/).
 
-## [2.3.0] – 2026-04-04
+## [1.0.0] – 2026-04-21
 
-### Added
-- Multi-category support: activities can draw cards from multiple question-bank
-  categories at once via a new `questioncategoryids` TEXT field.
-- Box-to-box animation on the student view, with configurable duration
-  (`animationdelay`, 500–3000 ms, default 1200 ms) and global on/off
-  (`showanimation`).
-- Five feedback styles selectable per activity — `off`, `minimal`, `encouraging`,
-  `animated`, `gamified` — with current/best streak tracking in gamified mode.
-- Interactive user tours (student + teacher) delivered via `tool_usertours`,
-  auto-imported on plugin install/upgrade, translatable through the core
-  multilang HTML filter.
-- Teacher dashboard (`report.php`) with per-student progress bars, session
-  counts, and reset-per-user action.
+First public release, submitted to the Moodle Plugins Directory / Marketplace.
+Earlier 1.x–2.x iterations existed as internal eLeDia pre-releases and are not
+reflected here; the full development history is preserved in the git log.
 
-### Changed
-- Upgraded to PHPUnit 11 attributes (`#[CoversClass]`, `#[DataProvider]`),
-  eliminating all deprecation warnings.
-- `calculate_box()` now uses a linear spread so box distribution is monotonic
-  across `correcttolearn` boundaries.
-- CSS selectors path-scoped under `.path-mod-eledialeitnerflow` to prevent
-  cross-plugin leakage.
+### Activity (students)
 
-### Fixed
-- Orphaned `grade_items` rows left over from the pre-rename component
-  (`leitnerflow`) are migrated or cleaned up in upgrade step 2024120124,
-  resolving a `coding_exception` raised during course/module edits.
-- All 55+ Moodle Codechecker warnings and the lone error resolved — plugin is
-  now 0 errors / 0 warnings on `phpcs --standard=moodle`.
-- All 15 previously failing PHPUnit tests pass; full suite is 31 tests /
-  70 assertions, green.
+- Leitner spaced-repetition flashcard activity backed by the Moodle Question
+  Engine (`immediatefeedback` behaviour). Each question in the selected
+  Question Bank categories becomes a virtual card that moves between boxes as
+  the student answers.
+- Configurable Leitner board: 1–5 boxes, `correcttolearn` threshold, questions
+  per session, wrong-answer behaviour (reset to Box 1, back one box, no change),
+  and card-selection strategy (lower boxes first, or mixed random).
+- Visual student dashboard with per-box card counts, multi-segment progress
+  bar, session history, per-session correct rate and duration, and a recent-
+  vs.-all-time trend indicator.
+- Five feedback styles — **Off**, **Minimal**, **Animated**, **Detailed**,
+  **Gamified** — with configurable animation delay (500–3000 ms). Gamified mode
+  tracks current and best streaks per session.
+- Clickable boxes let students practise a single box in isolation.
+- Guided first-visit user tour delivered via `tool_usertours`, auto-imported
+  on plugin install/upgrade and translatable through the core multilang HTML
+  filter (tour content ships in English and German).
 
-### Internal
-- Added `bin/precheck.sh`: runs the nine Moodle Plugin Directory prechecks
-  (phplint, phpcs, phpdoc, savepoint, js, css, mustache, grunt amd, thirdparty)
-  plus PHPUnit inside the Docker webserver container.
-- Added plugin-side PHPUnit data provider helpers and a dedicated generator.
+### Activity (teachers)
 
-## [2.2.0] – 2026-03-18
+- Multi-category question sourcing: activities can draw cards from one or
+  many Question Bank categories simultaneously.
+- Dynamic vs. fixed question pools — either always pull fresh from the
+  Question Bank, or lock the pool the first time a student starts.
+- Teacher report (`report.php`) showing per-student learned/open/error counts,
+  progress bars, session totals, last-session timestamp, and a
+  reset-progress action per participant.
+- Summary dashboard: participant count, total questions in pool, average
+  percentage of cards learned across all students.
+- Optional gradebook integration: no grade, or `percentage of cards learned`.
 
-### Added
-- Gradebook integration (`grademethod` setting: `none` or `percent_learned`).
-- Report page listing all students with progress bars, session counts, and
-  per-user reset button.
-- Privacy API implementation covering both personal-data tables.
+### Platform integration
 
-### Changed
-- `eledialeitnerflow_sessions` table extended with `questionsasked`,
-  `questionscorrect`, `timecompleted` for session-level analytics.
+- Backup and restore via the activity-module backup API.
+- Privacy API / GDPR compliant — `classes/privacy/provider.php` implements
+  both `core_privacy\local\metadata\provider` and
+  `core_privacy\local\request\plugin\provider`, plus
+  `core_userlist_provider`; user export and deletion are fully supported.
+- Course-reset support: per-activity progress and session history can be
+  wiped through the standard course-reset form.
+- Event logging: `session_started`, `session_completed`, `progress_reset`.
+- Capabilities: `view`, `attempt`, `viewreport`, `manage`, `resetprogress`,
+  `addinstance`.
 
-## [2.1.0] – 2026-02-10
+### Code quality
 
-### Added
-- Backup/restore support (activity module backup API).
-- `prioritystrategy` setting: `priority_box1` (default) or `random` card pick.
-- `wrongbehavior` setting: reset to box 1, demote one box, or no penalty.
-
-## [2.0.0] – 2026-01-22
-
-### Changed
-- **Renamed** from `mod_leitnerflow` to `mod_eledialeitnerflow` to match the
-  eLeDia frankenstyle convention. Migration handled automatically in
-  upgrade.php.
-
-## [1.0.0] – 2024-12-05
-
-### Added
-- Initial release: Leitner spaced-repetition activity using the Moodle
-  Question Engine as the card source and renderer. Supports 3–5 boxes,
-  configurable `correcttolearn`, session size, and dynamic vs. fixed pool
-  question rotation.
-- Companion sidebar block `block_eledialeitnerflow` showing per-course
-  progress for students and aggregate statistics for teachers.
+- Moodle coding style: 0 errors, 0 warnings on `phpcs --standard=moodle`.
+- PHPUnit: 37 tests / 81 assertions, all green (Moodle 5.1 + PHP 8.3).
+- Behat acceptance tests covering the student attempt flow and the teacher
+  report page.
+- CSS scoped under `.path-mod-eledialeitnerflow` and the `lf-` prefix to
+  prevent cross-plugin style leakage.
+- User-tour installer is idempotent — re-calling it never produces duplicate
+  tours, and an upgrade step de-duplicates any historical accumulation.

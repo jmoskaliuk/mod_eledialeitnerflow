@@ -18,7 +18,7 @@
  * Restore steps for mod_eledialeitnerflow.
  *
  * @package    mod_eledialeitnerflow
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -26,7 +26,7 @@
  * Activity restoration structure step class.
  *
  * @package    mod_eledialeitnerflow
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_eledialeitnerflow_activity_structure_step extends restore_activity_structure_step {

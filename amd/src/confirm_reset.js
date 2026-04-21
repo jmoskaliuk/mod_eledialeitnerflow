@@ -17,7 +17,7 @@
  * AMD module: confirm dialog for reset buttons in the teacher report.
  *
  * @module     mod_eledialeitnerflow/confirm_reset
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

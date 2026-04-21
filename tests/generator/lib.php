@@ -18,7 +18,7 @@
  * Test data generator for mod_eledialeitnerflow.
  *
  * @package    mod_eledialeitnerflow
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -29,7 +29,7 @@
  * and card states with a single method call.
  *
  * @package    mod_eledialeitnerflow
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_eledialeitnerflow_generator extends testing_module_generator {
@@ -40,10 +40,10 @@ class mod_eledialeitnerflow_generator extends testing_module_generator {
      *   correcttolearn, boxcount, wrongbehavior, sessionsize, etc.
      *
      * @param array|stdClass $record
-     * @param array          $options
+     * @param array|null     $options
      * @return stdClass  The course-module record (has ->instance for eledialeitnerflow id)
      */
-    public function create_instance($record = null, array $options = null): stdClass {
+    public function create_instance($record = null, ?array $options = null): stdClass {
         $record = (object)(array)($record ?? []);
 
         // Default Leitner settings.

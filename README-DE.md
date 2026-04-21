@@ -5,7 +5,7 @@
 LeitnerFlow bringt das bewährte Leitner-Karteikartensystem nach Moodle. Fragen aus der Fragensammlung werden zu virtuellen Karteikarten, die durch mehrere Boxen wandern. Richtige Antworten befördern eine Karte weiter, falsche schicken sie zurück. Lernende arbeiten in kurzen, fokussierten Sessions und verfolgen ihren Fortschritt über ein visuelles Dashboard.
 
 **Voraussetzung:** Moodle 4.4+
-**Aktuelle Version:** 1.9.0
+**Aktuelle Version:** 1.0.0
 **Lizenz:** [GPL v3+](https://www.gnu.org/copyleft/gpl.html)
 **Entwicklung:** [eLeDia GmbH](https://eledia.de)
 

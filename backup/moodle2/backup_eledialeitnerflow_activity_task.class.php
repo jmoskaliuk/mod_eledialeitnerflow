@@ -18,7 +18,7 @@
  * Backup task for mod_eledialeitnerflow.
  *
  * @package    mod_eledialeitnerflow
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ require_once($CFG->dirroot . '/mod/eledialeitnerflow/backup/moodle2/backup_eledi
  * Backup activity task for mod_eledialeitnerflow.
  *
  * @package    mod_eledialeitnerflow
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_eledialeitnerflow_activity_task extends backup_activity_task {

@@ -18,7 +18,7 @@
  * Activity settings form for mod_eledialeitnerflow.
  *
  * @package    mod_eledialeitnerflow
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
  * Module settings form for eLeDia Leitner Flow.
  *
  * @package    mod_eledialeitnerflow
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class mod_eledialeitnerflow_mod_form extends moodleform_mod {

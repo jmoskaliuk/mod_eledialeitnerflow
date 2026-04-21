@@ -21,7 +21,7 @@
  * Verbose:  vendor/bin/phpunit --testdox mod/eledialeitnerflow/tests/engine/leitner_engine_test.php
  *
  * @package    mod_eledialeitnerflow
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -34,7 +34,7 @@ use mod_eledialeitnerflow\engine\leitner_engine;
  *
  * @package    mod_eledialeitnerflow
  * @category   test
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(leitner_engine::class)]

@@ -18,7 +18,7 @@
  * Leitner engine — implements the spaced repetition logic.
  *
  * @package    mod_eledialeitnerflow
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -478,14 +478,37 @@ class leitner_engine {
 
         $students = get_enrolled_users($context, 'mod/eledialeitnerflow:attempt');
         $categoryids = self::get_category_ids($leitnerflow);
-        $result   = [];
+        if (empty($students) || empty($categoryids)) {
+            return [];
+        }
 
+        $allquestionids = self::get_questions_from_categories($categoryids);
+        $totalquestions = count($allquestionids);
+
+        // Get aggregate stats for all users at once to avoid N+1 queries.
+        $sql = "SELECT userid, 
+                       SUM(CASE WHEN status = :learned THEN 1 ELSE 0 END) as learnedcount,
+                       SUM(CASE WHEN status = :error THEN 1 ELSE 0 END) as errorcount
+                  FROM {eledialeitnerflow_card_state}
+                 WHERE eledialeitnerflowid = :lfid
+              GROUP BY userid";
+        
+        $allstats = $DB->get_records_sql($sql, [
+            'learned' => self::STATUS_LEARNED,
+            'error'   => self::STATUS_ERROR,
+            'lfid'    => $leitnerflow->id
+        ]);
+
+        $result   = [];
         foreach ($students as $student) {
-            $stats = self::get_user_stats(
-                $leitnerflow->id,
-                $student->id,
-                $categoryids
-            );
+            $userstats = $allstats[$student->id] ?? null;
+            
+            $stats = new \stdClass();
+            $stats->total           = $totalquestions;
+            $stats->learned         = $userstats ? (int)$userstats->learnedcount : 0;
+            $stats->errors          = $userstats ? (int)$userstats->errorcount : 0;
+            $stats->open            = max(0, $stats->total - $stats->learned - $stats->errors);
+            $stats->percent_learned = ($stats->total > 0) ? round(($stats->learned / $stats->total) * 100) : 0;
 
             // Session count + last session.
             $sessions = $DB->count_records('eledialeitnerflow_sessions', [

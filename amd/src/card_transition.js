@@ -20,7 +20,7 @@
  * highlights which box the card moved to, then redirects to next question.
  *
  * @module     mod_eledialeitnerflow/card_transition
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

@@ -21,7 +21,7 @@
  * UI uses Moodle Component Library (Bootstrap) where possible.
  *
  * @package    mod_eledialeitnerflow
- * @copyright  2024 eLeDia GmbH
+ * @copyright  2026 eLeDia GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -142,6 +142,8 @@ $slot = $currentindex + 1; // Quba slots are 1-based.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require_sesskey();
 
+    $transaction = $DB->start_delegated_transaction();
+
     $timenow = time();
     $quba->process_all_actions($timenow);
     question_engine::save_questions_usage_by_activity($quba);
@@ -176,12 +178,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $session->beststreak    = $beststreak;
     $session->currentindex  = $currentindex + 1;
 
+    $DB->update_record('eledialeitnerflow_sessions', $session);
+
+    $transaction->allow_commit();
+
     if ($session->currentindex >= $totalquestions) {
         _eledialeitnerflow_finish_session($session, $leitnerflow, $cm, $course);
         exit;
     }
-
-    $DB->update_record('eledialeitnerflow_sessions', $session);
 
     // Determine feedback mode.
     $feedbackstyle = (int)($leitnerflow->feedbackstyle ?? 2);
@@ -653,6 +657,13 @@ function _eledialeitnerflow_finish_session(stdClass $session, stdClass $leitnerf
     $session->status        = leitner_engine::SESSION_STATUS_COMPLETED;
     $session->timecompleted = time();
     $DB->update_record('eledialeitnerflow_sessions', $session);
+
+    // Clean up question usage to keep the database lean.
+    if (!empty($session->qubaid)) {
+        question_engine::delete_questions_usage_by_activity($session->qubaid);
+        $session->qubaid = null;
+        $DB->set_field('eledialeitnerflow_sessions', 'qubaid', null, ['id' => $session->id]);
+    }
 
     // Fire session_completed event.
     $event = \mod_eledialeitnerflow\event\session_completed::create([

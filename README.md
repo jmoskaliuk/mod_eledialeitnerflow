@@ -5,7 +5,7 @@
 LeitnerFlow brings the proven Leitner flashcard system into Moodle. Questions from the Question Bank become virtual flashcards that move through a series of boxes. Correct answers advance a card; wrong answers send it back. Students work in short, focused sessions and track their progress through a visual dashboard.
 
 **Requires:** Moodle 4.4+
-**Current version:** 1.9.0
+**Current version:** 1.0.0
 **License:** [GPL v3+](https://www.gnu.org/copyleft/gpl.html)
 **Maintainer:** [eLeDia GmbH](https://eledia.de)
 
@@ -71,7 +71,9 @@ Cards in lower boxes appear more frequently, so students naturally focus on what
 | Card selection | Lower boxes first / Mixed random | Lower boxes first |
 | Grading | None / % of cards learned | None |
 | Card animation | Yes / No | Yes |
-| Feedback style | Off / Minimal / Encouraging | Minimal |
+| Feedback style | Off / Minimal / Animated / Detailed / Gamified | Minimal |
+| Animation delay | 500–3000 ms | 1000 ms |
+| Show intro tour | Yes / No | Yes |
 
 ## File structure
 
