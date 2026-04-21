@@ -486,23 +486,23 @@ class leitner_engine {
         $totalquestions = count($allquestionids);
 
         // Get aggregate stats for all users at once to avoid N+1 queries.
-        $sql = "SELECT userid, 
+        $sql = "SELECT userid,
                        SUM(CASE WHEN status = :learned THEN 1 ELSE 0 END) as learnedcount,
                        SUM(CASE WHEN status = :error THEN 1 ELSE 0 END) as errorcount
                   FROM {eledialeitnerflow_card_state}
                  WHERE eledialeitnerflowid = :lfid
               GROUP BY userid";
-        
+
         $allstats = $DB->get_records_sql($sql, [
             'learned' => self::STATUS_LEARNED,
             'error'   => self::STATUS_ERROR,
-            'lfid'    => $leitnerflow->id
+            'lfid'    => $leitnerflow->id,
         ]);
 
         $result   = [];
         foreach ($students as $student) {
             $userstats = $allstats[$student->id] ?? null;
-            
+
             $stats = new \stdClass();
             $stats->total           = $totalquestions;
             $stats->learned         = $userstats ? (int)$userstats->learnedcount : 0;

@@ -109,6 +109,9 @@ class tour_installer {
      * The name filter ('leitner' substring) keeps this scoped to this plugin's
      * tours and avoids false positives from unrelated tours sharing a pathmatch
      * (e.g. future course-level tours).
+     *
+     * @param string $pathmatch Tour pathmatch pattern (e.g. '/mod/eledialeitnerflow/view.php%').
+     * @return bool True if at least one LeitnerFlow tour already exists for this pathmatch.
      */
     private static function tour_exists_for_path(string $pathmatch): bool {
         global $DB;
