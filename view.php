@@ -40,6 +40,15 @@ $leitnerflow = $DB->get_record('eledialeitnerflow', ['id' => $cm->instance], '*'
 require_login($course, true, $cm);
 $context = \core\context\module::instance($cm->id);
 
+// Trigger module viewed event for access logging.
+$event = \mod_eledialeitnerflow\event\course_module_viewed::create([
+    'objectid' => $leitnerflow->id,
+    'context' => $context,
+]);
+$event->add_record_snapshot('course', $course);
+$event->add_record_snapshot('eledialeitnerflow', $leitnerflow);
+$event->trigger();
+
 // Completion tracking.
 $completion = new completion_info($course);
 $completion->set_module_viewed($cm);
