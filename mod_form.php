@@ -303,7 +303,7 @@ class mod_eledialeitnerflow_mod_form extends moodleform_mod {
         if (!empty($data['grademethod']) && isset($data['gradepass']) && $data['gradepass'] !== '') {
             $gradepass = unformat_float($data['gradepass'], true);
             if ($gradepass !== false && $gradepass < 0) {
-                $errors['gradepass'] = get_string('error', 'moodle');
+                $errors['gradepass'] = get_string('gradepassmustbenonnegative', 'mod_eledialeitnerflow');
             } else if ($gradepass !== false && $gradepass > 100) {
                 $errors['gradepass'] = get_string('gradepassgreaterthangrade', 'grades', 100);
             }

@@ -169,9 +169,7 @@ function eledialeitnerflow_grade_item_update(stdClass $leitnerflow, $grades = nu
         $params
     );
 
-    $gradepass = (!isset($leitnerflow->gradepass) || $leitnerflow->gradepass === '' || $leitnerflow->gradepass === null)
-        ? 0
-        : (float)$leitnerflow->gradepass;
+    $gradepass = empty($leitnerflow->gradepass) ? 0 : (float)$leitnerflow->gradepass;
 
     $gradeitem = grade_item::fetch([
         'itemtype' => 'mod',

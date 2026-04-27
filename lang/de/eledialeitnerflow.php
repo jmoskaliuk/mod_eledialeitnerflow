@@ -94,6 +94,7 @@ $string['finishsession']      = 'Lerneinheit abschließen';
 $string['grademethod']               = 'Bewertung';
 $string['grademethod_none']          = 'Keine Bewertung';
 $string['grademethod_percent']       = '% der gelernten Karten';
+$string['gradepassmustbenonnegative'] = 'Die Bestehensgrenze muss null oder größer sein.';
 $string['gradingsettings']           = 'Bewertung';
 $string['incorrect']          = 'Falsch.';
 $string['invalidsession']  = 'Ungültige oder abgelaufene Lerneinheit.';
