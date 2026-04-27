@@ -79,8 +79,12 @@ Feature: Create and configure a LeitnerFlow activity
       | Grading       | % of cards learned    |
       | Grade to pass | 50                    |
     And I expand all fieldsets
+    And I wait "1" seconds
     And I click on "Add requirements" "radio"
+    And I wait "1" seconds
     And I click on "Receive a grade" "checkbox"
+    And I wait "1" seconds
     And I click on "Passing grade" "radio"
+    And I wait "1" seconds
     And I press "Save and return to course"
     Then I should see "Leitner Passing Grade" in the "region-main" "region"
