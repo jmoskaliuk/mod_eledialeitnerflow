@@ -68,3 +68,19 @@ Feature: Create and configure a LeitnerFlow activity
       | Grading       | % of cards learned  |
     And I press "Save and return to course"
     Then I should see "Leitner Graded" in the "region-main" "region"
+
+  @javascript
+  Scenario: Teacher can require a passing grade for completion
+    Given I log in as "teacher1"
+    And I am on "Course 1" course homepage with editing mode on
+    When I add a "eledialeitnerflow" activity to course "Course 1" section "1"
+    And I set the following fields to these values:
+      | LeitnerFlow   | Leitner Passing Grade |
+      | Grading       | % of cards learned    |
+      | Grade to pass | 50                    |
+    And I expand all fieldsets
+    And I click on "Add requirements" "radio"
+    And I click on "Receive a grade" "checkbox"
+    And I click on "Passing grade" "radio"
+    And I press "Save and return to course"
+    Then I should see "Leitner Passing Grade" in the "region-main" "region"

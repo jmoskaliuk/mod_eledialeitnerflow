@@ -261,6 +261,11 @@ class mod_eledialeitnerflow_mod_form extends moodleform_mod {
         );
         $mform->setDefault('grademethod', 0);
 
+        $mform->addElement('float', 'gradepass', get_string('gradepass', 'grades'));
+        $mform->addHelpButton('gradepass', 'gradepass', 'grades');
+        $mform->setDefault('gradepass', '');
+        $mform->hideIf('gradepass', 'grademethod', 'eq', '0');
+
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
     }
@@ -294,6 +299,14 @@ class mod_eledialeitnerflow_mod_form extends moodleform_mod {
         }
         if (isset($data['correcttolearn']) && (int)$data['correcttolearn'] < 1) {
             $errors['correcttolearn'] = get_string('error', 'moodle');
+        }
+        if (!empty($data['grademethod']) && isset($data['gradepass']) && $data['gradepass'] !== '') {
+            $gradepass = unformat_float($data['gradepass'], true);
+            if ($gradepass !== false && $gradepass < 0) {
+                $errors['gradepass'] = get_string('gradepassmustbenonnegative', 'mod_eledialeitnerflow');
+            } else if ($gradepass !== false && $gradepass > 100) {
+                $errors['gradepass'] = get_string('gradepassgreaterthangrade', 'grades', 100);
+            }
         }
 
         return $errors;

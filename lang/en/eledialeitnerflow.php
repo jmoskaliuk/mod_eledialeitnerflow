@@ -104,6 +104,7 @@ $string['finishsession']      = 'Finish session';
 $string['grademethod']               = 'Grading';
 $string['grademethod_none']          = 'No grade';
 $string['grademethod_percent']       = '% of cards learned';
+$string['gradepassmustbenonnegative'] = 'Grade to pass must be zero or higher.';
 $string['gradingsettings']           = 'Grading';
 $string['incorrect']          = 'Incorrect.';
 $string['invalidsession']  = 'Invalid or expired session.';
